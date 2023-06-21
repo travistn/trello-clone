@@ -1,5 +1,5 @@
 const Home = () => {
-  return <main></main>;
+  return <main className='main gradient'></main>;
 };
 
 export default Home;
