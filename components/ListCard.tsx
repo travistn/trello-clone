@@ -5,23 +5,24 @@ import { ListProps } from '@/types';
 
 interface ListCardProps {
   list: ListProps;
+  setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const ListCard = ({ list }: ListCardProps) => {
+const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
   const handleDelete = async () => {
     const hasConfirmed = confirm('Are you sure you want to delete this list?');
 
     if (hasConfirmed) {
+      setIsSubmitted(true);
+
       try {
-        const response = await fetch(`/api/list/${list._id}`, {
+        await fetch(`/api/list/${list._id}`, {
           method: 'DELETE',
         });
-
-        if (response.ok) {
-          console.log('List successfully deleted.');
-        }
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsSubmitted(false);
       }
     }
   };
@@ -35,7 +36,7 @@ const ListCard = ({ list }: ListCardProps) => {
           onClick={handleDelete}
         />
       </header>
-      <TaskCard task='Wash the car' />
+      {/* <TaskCard task='Wash the car' /> */}
     </div>
   );
 };

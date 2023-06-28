@@ -8,26 +8,28 @@ import Form from './Form';
 import { ListProps } from '@/types';
 
 const Board = () => {
-  const [toggleAddCard, setToggleAddCard] = useState(false);
   const [list, setList] = useState({ title: '' });
   const [lists, setLists] = useState([] as ListProps[]);
 
+  const [toggleAddCard, setToggleAddCard] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const createList = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitted(true);
+    setToggleAddCard(false);
 
     try {
-      const response = await fetch('/api/list/new', {
+      await fetch('/api/list/new', {
         method: 'POST',
         body: JSON.stringify({
           title: list.title,
         }),
       });
-
-      if (response.ok) {
-        console.log('New list successfully created.');
-      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsSubmitted(false);
     }
   };
 
@@ -40,12 +42,12 @@ const Board = () => {
     };
 
     fetchLists();
-  }, []);
+  }, [isSubmitted]);
 
   return (
     <div className='w-full p-8 flex flex-row gap-4 max-sm:flex-col max-sm:items-center'>
       {lists?.map((list) => (
-        <ListCard list={list} key={list?._id} />
+        <ListCard list={list} key={list?._id} setIsSubmitted={setIsSubmitted} />
       ))}
       <div
         className={`w-[272px] h-max rounded-[12px] px-4 py-3 ${
