@@ -45,7 +45,7 @@ const Board = () => {
   return (
     <div className='w-full p-8 flex flex-row gap-4 max-sm:flex-col max-sm:items-center'>
       {lists?.map((list) => (
-        <ListCard title={list?.title} key={list?._id} />
+        <ListCard list={list} key={list?._id} />
       ))}
       <div
         className={`w-[272px] h-max rounded-[12px] px-4 py-3 ${
