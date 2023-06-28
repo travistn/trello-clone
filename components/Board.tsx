@@ -17,7 +17,6 @@ const Board = () => {
   const createList = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
-    setToggleAddCard(false);
 
     try {
       await fetch('/api/list/new', {
@@ -30,6 +29,8 @@ const Board = () => {
       console.log(error);
     } finally {
       setIsSubmitted(false);
+      setToggleAddCard(false);
+      setList({ title: '' });
     }
   };
 
