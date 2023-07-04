@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import TaskCard from './TaskCard';
 import CustomButton from './CustomButton';
 import Form from './Form';
-import { ListProps } from '@/types';
+import { ListProps, TaskProps } from '@/types';
 
 interface ListCardProps {
   list: ListProps;
@@ -38,7 +38,7 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
       await fetch('/api/task/new', {
         method: 'POST',
         body: JSON.stringify({
-          description: 'Wash the car',
+          description: 'Eat',
           list: list._id,
         }),
       });
@@ -46,6 +46,19 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await fetch('/api/tasks', {
+        method: 'GET',
+      });
+      const data = await response.json();
+
+      setTasks(data);
+    };
+
+    fetchTasks();
+  }, []);
 
   return (
     <div className='bg-[#f1f2f4] w-[272px] h-max flex flex-col gap-3 rounded-[12px] p-2'>
