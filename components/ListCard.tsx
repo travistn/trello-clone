@@ -38,7 +38,7 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
       await fetch('/api/task/new', {
         method: 'POST',
         body: JSON.stringify({
-          description: 'Eat',
+          description: 'Do the dishes',
           list: list._id,
         }),
       });
@@ -70,7 +70,11 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
         />
       </header>
       <button onClick={createTask}>Add Task</button>
-      {/* <TaskCard task='Wash the car' /> */}
+      {tasks
+        .filter((task: { list: string }) => task.list === list?._id)
+        .map((task: TaskProps) => (
+          <TaskCard task={task} key={task._id} />
+        ))}
       {/* {!toggleAddTask ? (
         <CustomButton
           title='Add a task'
