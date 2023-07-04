@@ -1,5 +1,6 @@
 import { connectToDb } from '@/utils/database';
 import Task from '@/models/task';
+import List from '@/models/list';
 
 export const POST = async (req: Request) => {
   const { description, list } = await req.json();
@@ -10,7 +11,7 @@ export const POST = async (req: Request) => {
 
     await newTask.save();
 
-    return new Response(JSON.stringify(newTask), { status: 200 });
+    return new Response(JSON.stringify(newTask), { status: 201 });
   } catch (error) {
     console.log(error);
     return new Response('Failed to create a new task.', { status: 500 });
