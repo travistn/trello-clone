@@ -2,14 +2,13 @@ import { FormEventHandler, MouseEventHandler } from 'react';
 
 export interface ListProps {
   title: string;
+  _id?: string;
 }
 
-export interface ListCardProps {
-  title: string;
-}
-
-export interface TaskCardProps {
-  task: string;
+export interface TaskProps {
+  description: string;
+  _id?: string;
+  list?: string;
 }
 
 export interface CustomButtonProps {
@@ -18,6 +17,7 @@ export interface CustomButtonProps {
   containerStyles?: string;
   textStyles?: string;
   plusIcon?: boolean;
+  plusIconStyles?: string;
   handleClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -28,4 +28,6 @@ export interface FormProps {
   handleSubmit: FormEventHandler<HTMLFormElement>;
   list?: ListProps;
   setList?: (list: ListProps) => void;
+  task?: TaskProps;
+  setTask?: (task: TaskProps) => void;
 }
