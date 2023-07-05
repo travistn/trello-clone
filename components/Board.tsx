@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 
 import ListCard from './ListCard';
 import CustomButton from './CustomButton';
@@ -48,7 +48,12 @@ const Board = () => {
   return (
     <div className='w-full p-8 flex flex-row gap-4 max-sm:flex-col max-sm:items-center'>
       {lists?.map((list) => (
-        <ListCard list={list} key={list?._id} setIsSubmitted={setIsSubmitted} />
+        <ListCard
+          list={list}
+          key={list?._id}
+          isSubmitted={isSubmitted}
+          setIsSubmitted={setIsSubmitted}
+        />
       ))}
       <div
         className={`w-[272px] h-max rounded-[12px] px-4 py-3 ${
@@ -63,6 +68,7 @@ const Board = () => {
             textStyles='text-white text-[14px]'
             btnType='button'
             plusIcon={true}
+            plusIconStyles='fill-white stroke-1 stroke-white'
             handleClick={() => setToggleAddCard((prevState) => !prevState)}
           />
         ) : (
