@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 import TaskCard from './TaskCard';
@@ -8,12 +8,14 @@ import { ListProps, TaskProps } from '@/types';
 
 interface ListCardProps {
   list: ListProps;
+  isSubmitted: boolean;
   setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
-  const [toggleAddTask, setToggleAddTask] = useState(false);
+const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
+  const [task, setTask] = useState({ description: '' });
   const [tasks, setTasks] = useState([]);
+  const [toggleAddTask, setToggleAddTask] = useState(false);
 
   const handleDelete = async () => {
     const hasConfirmed = confirm('Are you sure you want to delete this list?');
@@ -33,17 +35,24 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
     }
   };
 
-  const createTask = async () => {
+  const createTask = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+
     try {
       await fetch('/api/task/new', {
         method: 'POST',
         body: JSON.stringify({
-          description: 'Do the dishes',
+          description: task.description,
           list: list._id,
         }),
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      setTask({ description: '' });
+      setToggleAddTask(false);
+      setIsSubmitted(false);
     }
   };
 
@@ -58,7 +67,7 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
     };
 
     fetchTasks();
-  }, []);
+  }, [isSubmitted]);
 
   return (
     <div className='bg-[#f1f2f4] w-[272px] h-max flex flex-col gap-3 rounded-[12px] p-2'>
@@ -69,13 +78,12 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
           onClick={handleDelete}
         />
       </header>
-      <button onClick={createTask}>Add Task</button>
       {tasks
         .filter((task: { list: string }) => task.list === list?._id)
         .map((task: TaskProps) => (
           <TaskCard task={task} key={task._id} />
         ))}
-      {/* {!toggleAddTask ? (
+      {!toggleAddTask ? (
         <CustomButton
           title='Add a task'
           containerStyles='w-full px-2 py-1 rounded-[8px] hover:bg-gray-300'
@@ -90,8 +98,11 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
           placeholder='Enter a task...'
           btnTitle='Add task'
           handleCloseClick={() => setToggleAddTask((prevState) => !prevState)}
+          task={task}
+          setTask={setTask}
+          handleSubmit={createTask}
         />
-      )} */}
+      )}
     </div>
   );
 };
