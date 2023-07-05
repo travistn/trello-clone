@@ -8,12 +8,13 @@ const CustomButton = ({
   textStyles,
   btnType,
   plusIcon,
+  plusIconStyles,
   handleClick,
 }: CustomButtonProps) => {
   return (
     <button type={btnType} className={`${containerStyles}`} onClick={handleClick}>
-      <span className={`flex flex-row items-center gap-1 ${textStyles}`}>
-        {plusIcon && <PlusIcon className='w-[16px] fill-white stroke-1 stroke-white' />}
+      <span className={`flex flex-row items-center gap-1.5 ${textStyles}`}>
+        {plusIcon && <PlusIcon className={`w-[16px] ${plusIconStyles}`} />}
         {title}
       </span>
     </button>
