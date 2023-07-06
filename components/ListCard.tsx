@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, FormEvent, KeyboardEventHandler } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 import TaskCard from './TaskCard';
@@ -15,6 +15,7 @@ interface ListCardProps {
 const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
   const [task, setTask] = useState({ description: '' });
   const [tasks, setTasks] = useState([]);
+  const [title, setTitle] = useState('');
   const [toggleAddTask, setToggleAddTask] = useState(false);
 
   const handleDelete = async () => {
@@ -31,6 +32,22 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
         console.log(error);
       } finally {
         setIsSubmitted(false);
+      }
+    }
+  };
+
+  const updateTitle: KeyboardEventHandler<HTMLTextAreaElement> = async (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      try {
+        await fetch(`/api/list/${list._id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            title,
+          }),
+        });
+      } catch (error) {
+        console.log(error);
       }
     }
   };
@@ -69,10 +86,22 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
     fetchTasks();
   }, [isSubmitted]);
 
+  useEffect(() => {
+    setTitle(list?.title);
+  }, []);
+
   return (
     <div className='bg-[#f1f2f4] w-[272px] h-max flex flex-col gap-3 rounded-[12px] p-2'>
-      <header className='flex flex-row justify-between items-center pl-3 pr-1'>
-        <h2 className='text-[14px] text-dark-navy font-semibold'>{list.title}</h2>
+      <header className='flex flex-row justify-between items-center pl-2 pr-1'>
+        <h2 className='text-[14px] text-dark-navy font-semibold'>
+          <textarea
+            value={title}
+            onChange={(e) => setTitle?.(e.target.value)}
+            onKeyDown={updateTitle}
+            onFocus={(e) => e.target.select()}
+            className='overflow-hidden h-[28px] rounded-[3px] resize-none p-1 mb-[-0.3rem] bg-inherit outline-[#1D7AFC] whitespace-nowrap'
+          />
+        </h2>
         <XMarkIcon
           className='w-[15px] text-navy cursor-pointer stroke-navy stroke-[0.5]'
           onClick={handleDelete}
