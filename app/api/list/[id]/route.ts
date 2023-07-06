@@ -14,3 +14,23 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
     });
   }
 };
+
+export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
+  const { title } = await req.json();
+
+  try {
+    await connectToDb();
+
+    const existingList = await List.findById(params.id);
+
+    existingList.title = title;
+
+    await existingList.save();
+
+    return new Response('Successfully updated the title', { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify('Failed to update the title.'), {
+      status: 500,
+    });
+  }
+};
