@@ -37,8 +37,11 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
   };
 
   const updateTitle: KeyboardEventHandler<HTMLTextAreaElement> = async (e) => {
+    const target = e.target as HTMLTextAreaElement;
+
     if (e.key === 'Enter') {
       e.preventDefault();
+
       try {
         await fetch(`/api/list/${list._id}`, {
           method: 'PATCH',
@@ -48,6 +51,8 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
         });
       } catch (error) {
         console.log(error);
+      } finally {
+        target.blur();
       }
     }
   };
@@ -99,6 +104,7 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
             onChange={(e) => setTitle?.(e.target.value)}
             onKeyDown={updateTitle}
             onFocus={(e) => e.target.select()}
+            spellCheck={false}
             className='overflow-hidden h-[28px] rounded-[3px] resize-none p-1 mb-[-0.3rem] bg-inherit outline-[#1D7AFC] whitespace-nowrap'
           />
         </h2>
