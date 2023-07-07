@@ -30,4 +30,5 @@ export interface FormProps {
   setList?: (list: ListProps) => void;
   task?: TaskProps;
   setTask?: (task: TaskProps) => void;
+  setToggle?: (toggle: boolean) => void;
 }
