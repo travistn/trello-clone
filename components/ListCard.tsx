@@ -130,6 +130,7 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
           task={task}
           setTask={setTask}
           handleSubmit={createTask}
+          setToggle={setToggleAddTask}
         />
       )}
     </div>

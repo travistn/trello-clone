@@ -79,6 +79,7 @@ const Board = () => {
             list={list}
             setList={setList}
             handleSubmit={createList}
+            setToggle={setToggleAddCard}
           />
         )}
       </div>

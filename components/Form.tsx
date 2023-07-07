@@ -1,5 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
+import { useEffect, useRef } from 'react';
 import { FormProps } from '@/types';
 import CustomButton from './CustomButton';
 
@@ -12,9 +13,25 @@ const Form = ({
   handleSubmit,
   task,
   setTask,
+  setToggle,
 }: FormProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    let handler = (e: any) => {
+      if (!formRef?.current?.contains(e.target)) {
+        setToggle?.(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+
+    return () => {
+      document.removeEventListener('mousedown', handler);
+    };
+  });
+
   return (
-    <form className='w-full flex flex-col gap-2' onSubmit={handleSubmit}>
+    <form className='w-full flex flex-col gap-2' onSubmit={handleSubmit} ref={formRef}>
       {list && (
         <input
           autoFocus
