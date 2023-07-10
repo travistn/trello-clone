@@ -6,13 +6,16 @@ import CustomButton from './CustomButton';
 
 interface TaskCardProps {
   task: TaskProps;
+  setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const TaskCard = ({ task }: TaskCardProps) => {
+const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [description, setDescription] = useState('');
 
   const updateTaskDescription = async () => {
+    setIsSubmitted(true);
+
     try {
       await fetch(`/api/task/${task._id}`, {
         method: 'PATCH',
@@ -24,6 +27,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
       console.log(error);
     } finally {
       setToggleEdit(false);
+      setIsSubmitted(false);
     }
   };
 

@@ -109,14 +109,14 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
           />
         </h2>
         <XMarkIcon
-          className='w-[15px] text-navy cursor-pointer stroke-navy stroke-[0.5]'
+          className='w-[18px] text-navy cursor-pointer stroke-navy stroke-[0.5] pr-1'
           onClick={handleDelete}
         />
       </header>
       {tasks
         .filter((task: { list: string }) => task.list === list?._id)
         .map((task: TaskProps) => (
-          <TaskCard task={task} key={task._id} />
+          <TaskCard task={task} setIsSubmitted={setIsSubmitted} key={task._id} />
         ))}
       {!toggleAddTask ? (
         <CustomButton
