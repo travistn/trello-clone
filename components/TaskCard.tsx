@@ -12,6 +12,21 @@ const TaskCard = ({ task }: TaskCardProps) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [description, setDescription] = useState('');
 
+  const updateTaskDescription = async () => {
+    try {
+      await fetch(`/api/task/${task._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          description,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setToggleEdit(false);
+    }
+  };
+
   useEffect(() => {
     setDescription(task.description);
   }, []);
@@ -41,6 +56,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
             containerStyles='w-fit bg-[#0c66e4] px-4 py-1.5 rounded-[4px] hover:bg-[#0055CC]'
             textStyles='text-[14px] text-white'
             btnType='submit'
+            handleClick={updateTaskDescription}
           />
         </div>
       )}
