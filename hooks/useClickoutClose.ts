@@ -1,9 +1,16 @@
-import { useEffect } from 'react';
+import { RefObject, useEffect } from 'react';
 
-const useClickoutClose = (ref: any, setToggle: any) => {
+import useEscapeClose from './useEscapeClose';
+
+const useClickoutClose = (
+  ref: RefObject<HTMLFormElement>,
+  setToggle: ((toggle: boolean) => void) | undefined
+) => {
+  useEscapeClose(setToggle);
+
   useEffect(() => {
-    let handler = (e: any) => {
-      if (!ref?.current?.contains(e.target)) {
+    let handler = (e: MouseEvent) => {
+      if (!ref?.current?.contains(e.target as Node)) {
         setToggle?.(false);
       }
     };
