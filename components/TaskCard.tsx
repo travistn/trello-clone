@@ -36,19 +36,16 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
   }, []);
 
   return (
-    <>
-      {!toggleEdit ? (
-        <div className='bg-white w-full h-fit p-2 flex flex-row items-center justify-between rounded-[8px] shadow-md cursor-pointer group hover:bg-gray-200'>
-          <p className='text-[14px] text-navy pl-1'>{task.description}</p>
-          <div className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover:visible'>
-            <PencilIcon
-              className='w-[11px] fill-white stroke-light-navy stroke-2'
-              onClick={() => setToggleEdit((prevState) => !prevState)}
-            />
-          </div>
-        </div>
-      ) : (
-        <div className='flex flex-col gap-2'>
+    <div className='bg-white w-full h-fit p-2 flex flex-row items-center justify-between rounded-[8px] shadow-md cursor-pointer group relative hover:bg-gray-200'>
+      <p className='text-[14px] text-navy pl-1'>{task.description}</p>
+      <div className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover:visible'>
+        <PencilIcon
+          className='w-[11px] fill-white stroke-light-navy stroke-2'
+          onClick={() => setToggleEdit((prevState) => !prevState)}
+        />
+      </div>
+      {toggleEdit && (
+        <div className='flex flex-col gap-2 w-full absolute top-0 left-0 z-10'>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -62,9 +59,10 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
             btnType='submit'
             handleClick={updateTaskDescription}
           />
+          <div className='fixed inset-0 bg-black/50 z-[-10] cursor-default' />
         </div>
       )}
-    </>
+    </div>
   );
 };
 
