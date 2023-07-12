@@ -1,8 +1,9 @@
+import { useEffect, useRef } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
-import { useEffect, useRef } from 'react';
 import { FormProps } from '@/types';
 import CustomButton from './CustomButton';
+import useClickoutClose from '@/hooks/useClickoutClose';
 
 const Form = ({
   placeholder,
@@ -17,18 +18,7 @@ const Form = ({
 }: FormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {
-    let handler = (e: any) => {
-      if (!formRef?.current?.contains(e.target)) {
-        setToggle?.(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-
-    return () => {
-      document.removeEventListener('mousedown', handler);
-    };
-  });
+  useClickoutClose(formRef, setToggle);
 
   return (
     <form className='w-full flex flex-col gap-2' onSubmit={handleSubmit} ref={formRef}>

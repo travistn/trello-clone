@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PencilIcon } from '@heroicons/react/24/solid';
 
 import { TaskProps } from '@/types';
 import CustomButton from './CustomButton';
+import useClickoutClose from '@/hooks/useClickoutClose';
 
 interface TaskCardProps {
   task: TaskProps;
@@ -12,6 +13,10 @@ interface TaskCardProps {
 const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [description, setDescription] = useState('');
+
+  const taskRef = useRef(null);
+
+  useClickoutClose(taskRef, setToggleEdit);
 
   const updateTaskDescription = async () => {
     setIsSubmitted(true);
@@ -45,21 +50,23 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
         />
       </div>
       {toggleEdit && (
-        <div className='flex flex-col gap-2 w-full absolute top-0 left-0 z-10'>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            spellCheck={false}
-            className='text-[14px] text-navy p-3 resize-none outline-none h-[90px] w-full rounded-[8px]'
-          />
-          <CustomButton
-            title='Save'
-            containerStyles='w-fit bg-[#0c66e4] px-4 py-1.5 rounded-[4px] hover:bg-[#0055CC]'
-            textStyles='text-[14px] text-white'
-            btnType='submit'
-            handleClick={updateTaskDescription}
-          />
-          <div className='fixed inset-0 bg-black/50 z-[-10] cursor-default' />
+        <div className='flex flex-col w-full absolute top-0 left-0 z-10'>
+          <div ref={taskRef}>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              spellCheck={false}
+              className='text-[14px] text-navy p-3 resize-none outline-none h-[90px] w-full rounded-[8px]'
+            />
+            <CustomButton
+              title='Save'
+              containerStyles='w-fit bg-[#0c66e4] px-4 py-1.5 rounded-[4px] hover:bg-[#0055CC]'
+              textStyles='text-[14px] text-white'
+              btnType='submit'
+              handleClick={updateTaskDescription}
+            />
+          </div>
+          <div className='fixed inset-0 bg-black/60 z-[-10] cursor-default' />
         </div>
       )}
     </div>
