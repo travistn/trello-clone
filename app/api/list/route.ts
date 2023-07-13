@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { connectToDb } from '@/utils/database';
 import List from '@/models/list';
 
+export const revalidate = 0;
+
 export const GET = async () => {
   try {
     await connectToDb();
