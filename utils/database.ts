@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 
 let isConnected = false;
 
@@ -13,7 +13,9 @@ export const connectToDb = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: 'trello',
-    });
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    } as ConnectOptions);
 
     isConnected = true;
     console.log('MongoDB connected');
