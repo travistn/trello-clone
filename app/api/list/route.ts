@@ -1,3 +1,5 @@
+import { revalidatePath } from 'next/cache';
+
 import { connectToDb } from '@/utils/database';
 import List from '@/models/list';
 
@@ -6,6 +8,8 @@ export const GET = async () => {
     await connectToDb();
 
     const lists = await List.find({});
+
+    revalidatePath('/api/list');
 
     return new Response(JSON.stringify(lists), {
       status: 200,
