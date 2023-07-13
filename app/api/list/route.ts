@@ -9,7 +9,7 @@ export const GET = async () => {
 
     const lists = await List.find({});
 
-    revalidatePath('/api/list');
+    revalidatePath('/');
 
     return new Response(JSON.stringify(lists), {
       status: 200,
