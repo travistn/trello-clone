@@ -24,6 +24,7 @@ const Board = () => {
         body: JSON.stringify({
           title: list.title,
         }),
+        next: { revalidate: 1 },
       });
     } catch (error) {
       console.log(error);
@@ -36,7 +37,7 @@ const Board = () => {
 
   useEffect(() => {
     const fetchLists = async () => {
-      const response = await fetch('/api/list');
+      const response = await fetch('/api/list', { next: { revalidate: 1 } });
       const data = await response.json();
 
       setLists(data);
