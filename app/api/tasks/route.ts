@@ -1,5 +1,9 @@
+import { NextResponse } from 'next/server';
+
 import { connectToDb } from '@/utils/database';
 import Task from '@/models/task';
+
+export const revalidate = 0;
 
 export const GET = async (req: Request) => {
   try {
@@ -7,12 +11,8 @@ export const GET = async (req: Request) => {
 
     const tasks = await Task.find();
 
-    return new Response(JSON.stringify(tasks), {
-      status: 200,
-    });
+    return NextResponse.json(tasks, { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify('Failed to fetch task.'), {
-      status: 500,
-    });
+    return NextResponse.json('Failed to fetch all tasks', { status: 500 });
   }
 };
