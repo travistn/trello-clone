@@ -2,7 +2,7 @@ import Board from '@/components/Board';
 
 const Home = () => {
   return (
-    <main className='main gradient'>
+    <main className='w-full min-h-screen gradient'>
       <Board />
     </main>
   );
