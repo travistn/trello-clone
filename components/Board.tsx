@@ -24,7 +24,6 @@ const Board = () => {
         body: JSON.stringify({
           title: list.title,
         }),
-        next: { revalidate: 1 },
       });
     } catch (error) {
       console.log(error);
