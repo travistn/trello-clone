@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache';
+import { NextResponse } from 'next/server';
 
 import { connectToDb } from '@/utils/database';
 import List from '@/models/list';
@@ -9,14 +9,8 @@ export const GET = async () => {
 
     const lists = await List.find({});
 
-    revalidatePath('/');
-
-    return new Response(JSON.stringify(lists), {
-      status: 200,
-    });
+    return NextResponse.json(lists, { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify('Failed to fetch all lists'), {
-      status: 500,
-    });
+    return NextResponse.json('Failed to fetch all lists', { status: 500 });
   }
 };
