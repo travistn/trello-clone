@@ -11,7 +11,7 @@ export const connectToDb = async () => {
   }
 
   try {
-    await mongoose.connect(<string>process.env.NEXT_PUBLIC_MONGODB_URI, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       dbName: 'trello',
     });
 
