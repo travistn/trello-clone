@@ -36,7 +36,7 @@ const Board = () => {
 
   useEffect(() => {
     const fetchLists = async () => {
-      const response = await fetch('/api/list', { next: { revalidate: 1 } });
+      const response = await fetch('/api/list', { next: { revalidate: 0 } });
       const data = await response.json();
 
       setLists(data);
