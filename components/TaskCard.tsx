@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { PencilIcon } from '@heroicons/react/24/solid';
+import { PencilIcon, ArchiveBoxXMarkIcon } from '@heroicons/react/24/solid';
+import { Menu } from '@headlessui/react';
 
 import { TaskProps } from '@/types';
 import CustomButton from './CustomButton';
@@ -42,7 +43,7 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
 
   return (
     <div className='bg-white w-full h-fit p-2 flex flex-row items-center justify-between rounded-[8px] shadow-md cursor-pointer group relative hover:bg-gray-200'>
-      <p className='text-[14px] text-navy pl-1'>{task.description}</p>
+      <p className='text-[14px] text-navy pl-1 leading-5'>{task.description}</p>
       <div className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover:visible'>
         <PencilIcon
           className='w-[11px] fill-white stroke-light-navy stroke-2'
@@ -56,7 +57,7 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               spellCheck={false}
-              className='text-[14px] text-navy p-3 resize-none outline-none h-[90px] w-full rounded-[8px]'
+              className='text-[14px] text-navy p-3 resize-none outline-none h-[90px] w-full rounded-[8px] leading-5'
             />
             <CustomButton
               title='Save'
@@ -66,6 +67,19 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
               handleClick={updateTaskDescription}
             />
           </div>
+          <Menu as='div' className='max-sm:mt-2 md:absolute md:right-[-8rem]'>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`${
+                    active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
+                  } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5`}>
+                  <ArchiveBoxXMarkIcon className='w-[14px]' />
+                  Delete Task
+                </button>
+              )}
+            </Menu.Item>
+          </Menu>
           <div className='fixed inset-0 bg-black/60 z-[-10] cursor-default' />
         </div>
       )}
