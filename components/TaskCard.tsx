@@ -37,6 +37,16 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
     }
   };
 
+  const deleteTask = async () => {
+    try {
+      await fetch(`/api/task/${task._id}`, {
+        method: 'DELETE',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setDescription(task.description);
   }, []);
@@ -73,7 +83,8 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
                 <button
                   className={`${
                     active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
-                  } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5`}>
+                  } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5`}
+                  onClick={deleteTask}>
                   <ArchiveBoxXMarkIcon className='w-[14px]' />
                   Delete Task
                 </button>
