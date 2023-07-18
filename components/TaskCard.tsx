@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { PencilIcon, ArchiveBoxXMarkIcon } from '@heroicons/react/24/solid';
-import { Menu } from '@headlessui/react';
+import { PencilIcon } from '@heroicons/react/24/solid';
 
 import { TaskProps } from '@/types';
 import CustomButton from './CustomButton';
 import useClickoutClose from '@/hooks/useClickoutClose';
+import TaskDropdown from './TaskDropdown';
 
 interface TaskCardProps {
   task: TaskProps;
@@ -34,16 +34,6 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
     } finally {
       setToggleEdit(false);
       setIsSubmitted(false);
-    }
-  };
-
-  const deleteTask = async () => {
-    try {
-      await fetch(`/api/task/${task._id}`, {
-        method: 'DELETE',
-      });
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -77,20 +67,7 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
               handleClick={updateTaskDescription}
             />
           </div>
-          <Menu as='div' className='max-sm:mt-2 md:absolute md:right-[-8rem]'>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={`${
-                    active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
-                  } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5`}
-                  onClick={deleteTask}>
-                  <ArchiveBoxXMarkIcon className='w-[14px]' />
-                  Delete Task
-                </button>
-              )}
-            </Menu.Item>
-          </Menu>
+          <TaskDropdown task={task} taskRef={taskRef} setToggleEdit={setToggleEdit} />
           <div className='fixed inset-0 bg-black/60 z-[-10] cursor-default' />
         </div>
       )}
