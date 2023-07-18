@@ -9,12 +9,15 @@ interface TaskDropDownProps {
   task: TaskProps;
   taskRef: RefObject<HTMLFormElement>;
   setToggleEdit: (toggle: boolean) => void;
+  setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const TaskDropdown = ({ task, taskRef, setToggleEdit }: TaskDropDownProps) => {
+const TaskDropdown = ({ task, taskRef, setToggleEdit, setIsSubmitted }: TaskDropDownProps) => {
   useClickoutClose(taskRef, setToggleEdit);
 
   const deleteTask = async () => {
+    setIsSubmitted(true);
+
     try {
       await fetch(`/api/task/${task._id}`, {
         method: 'DELETE',
@@ -23,6 +26,7 @@ const TaskDropdown = ({ task, taskRef, setToggleEdit }: TaskDropDownProps) => {
       console.log(error);
     } finally {
       setToggleEdit(false);
+      setIsSubmitted(false);
     }
   };
 

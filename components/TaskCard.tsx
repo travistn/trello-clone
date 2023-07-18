@@ -67,7 +67,12 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
               handleClick={updateTaskDescription}
             />
           </div>
-          <TaskDropdown task={task} taskRef={taskRef} setToggleEdit={setToggleEdit} />
+          <TaskDropdown
+            task={task}
+            taskRef={taskRef}
+            setToggleEdit={setToggleEdit}
+            setIsSubmitted={setIsSubmitted}
+          />
           <div className='fixed inset-0 bg-black/60 z-[-10] cursor-default' />
         </div>
       )}
