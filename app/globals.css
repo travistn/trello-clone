@@ -2,13 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-.main {
-  width: 100vw;
-  min-height: 100vh;
-  position: fixed;
-  display: flex;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .gradient {
   background-image: url('/dark-blue-gradient.svg');
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    height: 12px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    background: #172844;
+    border-radius: 4px;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #757f90;
+    border-radius: 4px;
+  }
 }
