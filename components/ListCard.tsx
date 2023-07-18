@@ -96,7 +96,7 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
   }, []);
 
   return (
-    <div className='bg-[#f1f2f4] w-[272px] h-max flex flex-col gap-3 rounded-[12px] p-2 select-none'>
+    <div className='bg-[#f1f2f4] w-[272px] h-max flex flex-col gap-3 rounded-[12px] p-2 select-none md:min-w-[272px]'>
       <header className='flex flex-row justify-between items-center pl-2 pr-1'>
         <h2 className='text-[14px] text-dark-navy font-semibold'>
           <textarea
