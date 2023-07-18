@@ -46,42 +46,46 @@ const Board = () => {
   }, [isSubmitted]);
 
   return (
-    <div className='w-full p-8 flex flex-row gap-4 max-sm:flex-col max-sm:items-center'>
-      {lists?.map((list) => (
-        <ListCard
-          list={list}
-          key={list?._id}
-          isSubmitted={isSubmitted}
-          setIsSubmitted={setIsSubmitted}
-        />
-      ))}
-      <div
-        className={`w-[272px] h-max rounded-[12px] px-4 py-3 ${
-          !toggleAddCard
-            ? 'bg-[#68758b] cursor-pointer transition-colors duration-100 ease-in hover:bg-[#A6C5E229] '
-            : 'bg-white'
-        }`}>
-        {!toggleAddCard ? (
-          <CustomButton
-            title='Add another list'
-            containerStyles='w-full'
-            textStyles='text-white text-[14px]'
-            btnType='button'
-            plusIcon={true}
-            plusIconStyles='fill-white stroke-1 stroke-white'
-            handleClick={() => setToggleAddCard((prevState) => !prevState)}
-          />
-        ) : (
-          <Form
-            placeholder='Enter list title...'
-            btnTitle='Add list'
-            handleCloseClick={() => setToggleAddCard((prevState) => !prevState)}
-            list={list}
-            setList={setList}
-            handleSubmit={createList}
-            setToggle={setToggleAddCard}
-          />
-        )}
+    <div className='w-full h-full px-8 pt-8 pb-14 max-sm:pb-8'>
+      <div className='h-full flex flex-row gap-4 scrollbar max-sm:flex-col max-sm:items-center md:overflow-x-auto'>
+        {lists?.map((list) => (
+          <div className='h-full pb-1.5'>
+            <ListCard
+              list={list}
+              key={list?._id}
+              isSubmitted={isSubmitted}
+              setIsSubmitted={setIsSubmitted}
+            />
+          </div>
+        ))}
+        <div
+          className={`w-[272px] h-max rounded-[12px] px-4 py-3 md:min-w-[272px] ${
+            !toggleAddCard
+              ? 'bg-[#68758b] cursor-pointer transition-colors duration-100 ease-in hover:bg-[#A6C5E229] '
+              : 'bg-white'
+          }`}>
+          {!toggleAddCard ? (
+            <CustomButton
+              title='Add another list'
+              containerStyles='w-full'
+              textStyles='text-white text-[14px]'
+              btnType='button'
+              plusIcon={true}
+              plusIconStyles='fill-white stroke-1 stroke-white'
+              handleClick={() => setToggleAddCard((prevState) => !prevState)}
+            />
+          ) : (
+            <Form
+              placeholder='Enter list title...'
+              btnTitle='Add list'
+              handleCloseClick={() => setToggleAddCard((prevState) => !prevState)}
+              list={list}
+              setList={setList}
+              handleSubmit={createList}
+              setToggle={setToggleAddCard}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
