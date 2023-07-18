@@ -1,6 +1,6 @@
 const Navbar = () => {
   return (
-    <nav className='w-full bg-[#46536a] py-2 px-4'>
+    <nav className='w-full bg-[#46536a] py-2 px-4 md:md:w-screen'>
       <div className='flex flex-row items-center gap-2'>
         <svg viewBox='0 0 128 128' className='w-[20px]'>
           <path
