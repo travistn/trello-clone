@@ -38,7 +38,7 @@ const TaskDropdown = ({ task, taskRef, setToggleEdit, setIsSubmitted }: TaskDrop
             <button
               className={`${
                 active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
-              } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5`}
+              } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5 transition-transform duration-100 ease-in hover:translate-x-1`}
               onClick={deleteTask}>
               <ArchiveBoxXMarkIcon className='w-[14px]' />
               Delete Task
@@ -50,7 +50,7 @@ const TaskDropdown = ({ task, taskRef, setToggleEdit, setIsSubmitted }: TaskDrop
             <button
               className={`${
                 active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
-              } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5`}>
+              } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5 transition-transform duration-100 ease-in hover:translate-x-1`}>
               <ArrowRightIcon
                 className={`${active ? 'stroke-white' : 'stroke-[#c7d1db]'} w-[14px]`}
               />
