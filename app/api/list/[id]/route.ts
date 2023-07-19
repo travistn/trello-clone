@@ -1,11 +1,14 @@
 import { connectToDb } from '@/utils/database';
 import List from '@/models/list';
+import Task from '@/models/task';
 
 export const DELETE = async (req: Request, { params }: { params: { id: string } }) => {
   try {
     await connectToDb();
 
     await List.findByIdAndDelete(params.id);
+
+    await Task.deleteMany({ list: params.id });
 
     return new Response('List deleted successfully', { status: 200 });
   } catch (error) {
