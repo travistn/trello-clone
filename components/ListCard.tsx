@@ -97,7 +97,7 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
 
   return (
     <div className='bg-[#f1f2f4] w-[272px] h-max flex flex-col gap-3 rounded-[12px] p-2 select-none md:min-w-[272px]'>
-      <header className='flex flex-row justify-between items-center pl-2 pr-1'>
+      <header className='flex flex-row justify-between items-center pl-2'>
         <h2 className='text-[14px] text-dark-navy font-semibold'>
           <textarea
             value={title}
@@ -108,10 +108,12 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
             className='overflow-hidden h-[28px] rounded-[3px] resize-none p-1 mb-[-0.3rem] bg-inherit outline-[#1D7AFC] whitespace-nowrap'
           />
         </h2>
-        <XMarkIcon
-          className='w-[18px] text-navy cursor-pointer stroke-navy stroke-[0.5] pr-1'
-          onClick={handleDelete}
-        />
+        <div className='rounded-md p-1.5 mr-[0.1rem] hover:bg-gray-300'>
+          <XMarkIcon
+            className='w-[14px] text-navy cursor-pointer stroke-navy stroke-[0.5]'
+            onClick={handleDelete}
+          />
+        </div>
       </header>
       {tasks
         .filter((task: { list: string }) => task.list === list?._id)
