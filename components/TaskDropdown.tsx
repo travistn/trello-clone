@@ -19,17 +19,21 @@ const TaskDropdown = ({ task, taskRef, setToggleEdit, setIsSubmitted }: TaskDrop
   useClickoutClose(taskRef, setToggleEdit);
 
   const deleteTask = async () => {
-    setIsSubmitted(true);
+    const hasConfirmed = confirm('Are you sure you want to delete this task?');
 
-    try {
-      await fetch(`/api/task/${task._id}`, {
-        method: 'DELETE',
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setToggleEdit(false);
-      setIsSubmitted(false);
+    if (hasConfirmed) {
+      setIsSubmitted(true);
+
+      try {
+        await fetch(`/api/task/${task._id}`, {
+          method: 'DELETE',
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setToggleEdit(false);
+        setIsSubmitted(false);
+      }
     }
   };
 
