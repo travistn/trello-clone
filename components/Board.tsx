@@ -5,14 +5,15 @@ import { useState, useEffect, FormEvent } from 'react';
 import ListCard from './ListCard';
 import CustomButton from './CustomButton';
 import Form from './Form';
-import { ListProps } from '@/types';
+import useListStore from '@/store/store';
 
 const Board = () => {
   const [list, setList] = useState({ title: '' });
-  const [lists, setLists] = useState([] as ListProps[]);
-
   const [toggleAddCard, setToggleAddCard] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const lists = useListStore((state) => state.lists);
+  const setLists = useListStore((state) => state.setLists);
 
   const createList = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,13 +50,8 @@ const Board = () => {
     <div className='w-full h-full px-8 pt-8 pb-14 max-sm:pb-8'>
       <div className='h-full flex flex-row gap-4 scrollbar max-sm:flex-col max-sm:items-center md:overflow-x-auto'>
         {lists?.map((list) => (
-          <div className='h-full pb-1.5'>
-            <ListCard
-              list={list}
-              key={list?._id}
-              isSubmitted={isSubmitted}
-              setIsSubmitted={setIsSubmitted}
-            />
+          <div className='h-full pb-1.5' key={list?._id}>
+            <ListCard list={list} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted} />
           </div>
         ))}
         <div
