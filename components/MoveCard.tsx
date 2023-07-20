@@ -3,13 +3,17 @@ import { Listbox } from '@headlessui/react';
 
 import CustomButton from './CustomButton';
 import useListStore from '@/store/store';
+import { TaskProps } from '@/types';
 
 interface MoveCardProps {
+  task: TaskProps;
   setOpenMove: (openMove: boolean) => void;
 }
 
-const MoveCard = ({ setOpenMove }: MoveCardProps) => {
+const MoveCard = ({ task, setOpenMove }: MoveCardProps) => {
   const lists = useListStore((state) => state.lists);
+
+  const list = lists.find((list) => task.list === list._id);
 
   return (
     <div className='p-3 bg-white rounded-[8px] w-[300px] cursor-default'>
@@ -30,7 +34,9 @@ const MoveCard = ({ setOpenMove }: MoveCardProps) => {
               <Listbox.Label className='text-[12px] text-light-navy cursor-pointer'>
                 List
               </Listbox.Label>
-              <Listbox.Button className='text-left text-[14px] text-navy '>To Do</Listbox.Button>
+              <Listbox.Button className='text-left text-[14px] text-navy '>
+                {list?.title}
+              </Listbox.Button>
             </div>
             <Listbox.Options className='text-[14px] text-navy bg-white absolute w-full border border-gray-500'>
               {lists.map((list) => (
