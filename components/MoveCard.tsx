@@ -2,12 +2,15 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import { Listbox } from '@headlessui/react';
 
 import CustomButton from './CustomButton';
+import useListStore from '@/store/store';
 
 interface MoveCardProps {
   setOpenMove: (openMove: boolean) => void;
 }
 
 const MoveCard = ({ setOpenMove }: MoveCardProps) => {
+  const lists = useListStore((state) => state.lists);
+
   return (
     <div className='p-3 bg-white rounded-[8px] w-[300px] cursor-default'>
       <header className='flex flex-row items-center'>
@@ -30,27 +33,16 @@ const MoveCard = ({ setOpenMove }: MoveCardProps) => {
               <Listbox.Button className='text-left text-[14px] text-navy '>To Do</Listbox.Button>
             </div>
             <Listbox.Options className='text-[14px] text-navy bg-white absolute w-full border border-gray-500'>
-              <Listbox.Option
-                value='To Do'
-                className={({ active }) =>
-                  `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
-                }>
-                To Do
-              </Listbox.Option>
-              <Listbox.Option
-                value='In Progress'
-                className={({ active }) =>
-                  `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
-                }>
-                In Progress
-              </Listbox.Option>
-              <Listbox.Option
-                value='Completed'
-                className={({ active }) =>
-                  `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
-                }>
-                Completed
-              </Listbox.Option>
+              {lists.map((list) => (
+                <Listbox.Option
+                  value={list.title}
+                  key={list._id}
+                  className={({ active }) =>
+                    `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
+                  }>
+                  {list.title}
+                </Listbox.Option>
+              ))}
             </Listbox.Options>
           </Listbox>
           <Listbox as='div' className='bg-[#f1f2f4] rounded-[3px] relative w-[80px]'>
