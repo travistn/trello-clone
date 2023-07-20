@@ -1,9 +1,10 @@
-import { RefObject } from 'react';
+import { useState, RefObject } from 'react';
 import { Menu } from '@headlessui/react';
 import { ArchiveBoxXMarkIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 
 import useClickoutClose from '@/hooks/useClickoutClose';
 import { TaskProps } from '@/types';
+import MoveCard from './MoveCard';
 
 interface TaskDropDownProps {
   task: TaskProps;
@@ -13,6 +14,8 @@ interface TaskDropDownProps {
 }
 
 const TaskDropdown = ({ task, taskRef, setToggleEdit, setIsSubmitted }: TaskDropDownProps) => {
+  const [openMove, setOpenMove] = useState(false);
+
   useClickoutClose(taskRef, setToggleEdit);
 
   const deleteTask = async () => {
@@ -45,19 +48,27 @@ const TaskDropdown = ({ task, taskRef, setToggleEdit, setIsSubmitted }: TaskDrop
             </button>
           )}
         </Menu.Item>
-        <Menu.Item>
-          {({ active }) => (
-            <button
-              className={`${
-                active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
-              } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5 transition-transform duration-100 ease-in hover:translate-x-1`}>
-              <ArrowRightIcon
-                className={`${active ? 'stroke-white' : 'stroke-[#c7d1db]'} w-[14px]`}
-              />
-              Move
-            </button>
+        <div className='relative'>
+          <Menu.Item as='div' className='relative'>
+            {({ active }) => (
+              <button
+                className={`${
+                  active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
+                } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5 transition-transform duration-100 ease-in hover:translate-x-1`}
+                onClick={() => setOpenMove((prevState) => !prevState)}>
+                <ArrowRightIcon
+                  className={`${active ? 'stroke-white' : 'stroke-[#c7d1db]'} w-[14px]`}
+                />
+                Move
+              </button>
+            )}
+          </Menu.Item>
+          {openMove && (
+            <div className='absolute mt-2'>
+              <MoveCard setOpenMove={setOpenMove} />
+            </div>
           )}
-        </Menu.Item>
+        </div>
       </div>
     </Menu>
   );
