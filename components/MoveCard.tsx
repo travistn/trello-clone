@@ -1,5 +1,6 @@
-import { XMarkIcon } from '@heroicons/react/24/solid';
+import { useState } from 'react';
 import { Listbox } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 
 import CustomButton from './CustomButton';
 import useListStore from '@/store/store';
@@ -12,8 +13,9 @@ interface MoveCardProps {
 
 const MoveCard = ({ task, setOpenMove }: MoveCardProps) => {
   const lists = useListStore((state) => state.lists);
-
   const list = lists.find((list) => task.list === list._id);
+
+  const [selected, setSelected] = useState(list);
 
   return (
     <div className='p-3 bg-white rounded-[8px] w-[300px] cursor-default'>
@@ -29,19 +31,23 @@ const MoveCard = ({ task, setOpenMove }: MoveCardProps) => {
       <div className='flex flex-col gap-2 mt-4'>
         <h4 className='text-[12px] text-light-navy font-semibold leading-4'>Select destination</h4>
         <div className='flex flex-row gap-2 w-full'>
-          <Listbox as='div' className='bg-[#f1f2f4] rounded-[3px] relative w-[200px]'>
+          <Listbox
+            as='div'
+            value={selected}
+            onChange={setSelected}
+            className='bg-[#f1f2f4] rounded-[3px] relative w-[200px]'>
             <div className='flex flex-col px-2 py-1 rounded-[3px] hover:bg-gray-300'>
               <Listbox.Label className='text-[12px] text-light-navy cursor-pointer'>
                 List
               </Listbox.Label>
               <Listbox.Button className='text-left text-[14px] text-navy '>
-                {list?.title}
+                {selected?.title}
               </Listbox.Button>
             </div>
             <Listbox.Options className='text-[14px] text-navy bg-white absolute w-full border border-gray-500'>
               {lists.map((list) => (
                 <Listbox.Option
-                  value={list.title}
+                  value={list}
                   key={list._id}
                   className={({ active }) =>
                     `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
