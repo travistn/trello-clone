@@ -65,7 +65,7 @@ const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps
           </Menu.Item>
           {openMove && (
             <div className='absolute mt-2'>
-              <MoveCard task={task} setOpenMove={setOpenMove} />
+              <MoveCard task={task} setOpenMove={setOpenMove} setIsSubmitted={setIsSubmitted} />
             </div>
           )}
         </div>

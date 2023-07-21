@@ -9,13 +9,32 @@ import { TaskProps } from '@/types';
 interface MoveCardProps {
   task: TaskProps;
   setOpenMove: (openMove: boolean) => void;
+  setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const MoveCard = ({ task, setOpenMove }: MoveCardProps) => {
+const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
   const lists = useListStore((state) => state.lists);
-  const startList = lists.find((list) => task.list === list._id);
+  const list = lists.find((list) => task.list === list._id);
 
-  const [selected, setSelected] = useState(startList);
+  const [selected, setSelected] = useState(list);
+
+  const changeTaskList = async () => {
+    setIsSubmitted(true);
+
+    try {
+      await fetch(`/api/task/${task._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          list: selected?._id,
+          category: 'list',
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitted(false);
+    }
+  };
 
   return (
     <div className='p-3 bg-white rounded-[8px] w-[300px] cursor-default'>
@@ -94,6 +113,7 @@ const MoveCard = ({ task, setOpenMove }: MoveCardProps) => {
         title='Move'
         containerStyles='w-fit bg-[#0c66e4] px-4 py-1.5 rounded-[4px] mt-3 hover:bg-[#0055CC]'
         textStyles='text-[14px] text-white'
+        handleClick={changeTaskList}
       />
     </div>
   );
