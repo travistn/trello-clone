@@ -2,21 +2,17 @@ import { useState, RefObject } from 'react';
 import { Menu } from '@headlessui/react';
 import { ArchiveBoxXMarkIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 
-import useClickoutClose from '@/hooks/useClickoutClose';
 import { TaskProps } from '@/types';
 import MoveCard from './MoveCard';
 
 interface TaskDropDownProps {
   task: TaskProps;
-  taskRef: RefObject<HTMLFormElement>;
   setToggleEdit: (toggle: boolean) => void;
   setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const TaskDropdown = ({ task, taskRef, setToggleEdit, setIsSubmitted }: TaskDropDownProps) => {
+const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps) => {
   const [openMove, setOpenMove] = useState(false);
-
-  useClickoutClose(taskRef, setToggleEdit);
 
   const deleteTask = async () => {
     const hasConfirmed = confirm('Are you sure you want to delete this task?');
@@ -38,7 +34,7 @@ const TaskDropdown = ({ task, taskRef, setToggleEdit, setIsSubmitted }: TaskDrop
   };
 
   return (
-    <Menu as='div' className='max-sm:mt-2 md:absolute md:right-[-8rem]' ref={taskRef}>
+    <Menu as='div' className='max-sm:mt-2 md:absolute md:right-[-8rem] md:top-0'>
       <div className='flex flex-col gap-1'>
         <Menu.Item>
           {({ active }) => (
