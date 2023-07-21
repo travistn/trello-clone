@@ -13,9 +13,9 @@ interface MoveCardProps {
 
 const MoveCard = ({ task, setOpenMove }: MoveCardProps) => {
   const lists = useListStore((state) => state.lists);
-  const list = lists.find((list) => task.list === list._id);
+  const startList = lists.find((list) => task.list === list._id);
 
-  const [selected, setSelected] = useState(list);
+  const [selected, setSelected] = useState(startList);
 
   return (
     <div className='p-3 bg-white rounded-[8px] w-[300px] cursor-default'>
@@ -52,7 +52,7 @@ const MoveCard = ({ task, setOpenMove }: MoveCardProps) => {
                   className={({ active }) =>
                     `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
                   }>
-                  {list.title}
+                  {task.list === list._id ? `${list.title} (current)` : list.title}
                 </Listbox.Option>
               ))}
             </Listbox.Options>
