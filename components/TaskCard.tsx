@@ -27,6 +27,7 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
         method: 'PATCH',
         body: JSON.stringify({
           description,
+          category: 'description',
         }),
       });
     } catch (error) {
