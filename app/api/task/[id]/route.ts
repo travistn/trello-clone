@@ -2,9 +2,10 @@ import { NextResponse } from 'next/server';
 
 import { connectToDb } from '@/utils/database';
 import Task from '@/models/task';
+import List from '@/models/list';
 
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
-  const { description, list, category } = await req.json();
+  const { description, list, category, task } = await req.json();
 
   try {
     await connectToDb();
@@ -13,7 +14,26 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     if (category === 'description') existingTask.description = description;
 
-    if (category === 'list') existingTask.list = list;
+    if (category === 'list') {
+      existingTask.list = list;
+
+      const listImportingTask = await List.findById(list);
+
+      listImportingTask.tasks.push(existingTask);
+
+      const removeTaskFromList = await List.findOneAndUpdate(
+        { _id: task.list },
+        {
+          $pull: {
+            tasks: task._id,
+          },
+        },
+        { safe: true }
+      );
+
+      await listImportingTask.save();
+      await removeTaskFromList.save();
+    }
 
     await existingTask.save();
 
