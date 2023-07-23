@@ -1,3 +1,5 @@
+import { NextResponse } from 'next/server';
+
 import { connectToDb } from '@/utils/database';
 import Task from '@/models/task';
 import List from '@/models/list';
@@ -9,11 +11,16 @@ export const POST = async (req: Request) => {
     await connectToDb();
     const newTask = new Task({ description, list });
 
-    await newTask.save();
+    const existingList = await List.findById(list);
 
-    return new Response(JSON.stringify(newTask), { status: 201 });
+    existingList.tasks.push(newTask);
+
+    await newTask.save();
+    await existingList.save();
+
+    return NextResponse.json(newTask, { status: 201 });
   } catch (error) {
     console.log(error);
-    return new Response('Failed to create a new task.', { status: 500 });
+    return NextResponse.json('Failed to create a new task.', { status: 500 });
   }
 };
