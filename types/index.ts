@@ -3,6 +3,7 @@ import { FormEventHandler, MouseEventHandler } from 'react';
 export interface ListProps {
   title: string;
   _id?: string;
+  tasks?: TaskProps[];
 }
 
 export interface TaskProps {
