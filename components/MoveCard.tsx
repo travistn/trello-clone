@@ -25,6 +25,7 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
       await fetch(`/api/task/${task._id}`, {
         method: 'PATCH',
         body: JSON.stringify({
+          task: task,
           list: selected?._id,
           category: 'list',
         }),
