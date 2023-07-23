@@ -5,6 +5,12 @@ const ListSchema = new Schema({
     type: String,
     required: [true, 'A title is required.'],
   },
+  tasks: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Task',
+    },
+  ],
 });
 
 const List = models.List || model('List', ListSchema);
