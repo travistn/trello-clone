@@ -9,7 +9,7 @@ export const GET = async () => {
   try {
     await connectToDb();
 
-    const lists = await List.find({});
+    const lists = await List.find({}).populate('tasks');
 
     return NextResponse.json(lists, { status: 200 });
   } catch (error) {
