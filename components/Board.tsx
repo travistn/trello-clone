@@ -37,7 +37,7 @@ const Board = () => {
 
   useEffect(() => {
     const fetchLists = async () => {
-      const response = await fetch('/api/list', { next: { revalidate: 0 } });
+      const response = await fetch('/api/list');
       const data = await response.json();
 
       setLists(data);
@@ -51,7 +51,7 @@ const Board = () => {
       <div className='h-full flex flex-row gap-4 scrollbar max-sm:flex-col max-sm:items-center md:overflow-x-auto'>
         {lists?.map((list) => (
           <div className='h-full pb-1.5' key={list?._id}>
-            <ListCard list={list} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted} />
+            <ListCard list={list} setIsSubmitted={setIsSubmitted} />
           </div>
         ))}
         <div
