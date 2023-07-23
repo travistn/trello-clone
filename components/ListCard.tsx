@@ -8,13 +8,11 @@ import { ListProps, TaskProps } from '@/types';
 
 interface ListCardProps {
   list: ListProps;
-  isSubmitted: boolean;
   setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
+const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
   const [task, setTask] = useState({ description: '' });
-  const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState('');
   const [toggleAddTask, setToggleAddTask] = useState(false);
 
@@ -79,19 +77,6 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
   };
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      const response = await fetch('/api/tasks', {
-        method: 'GET',
-      });
-      const data = await response.json();
-
-      setTasks(data);
-    };
-
-    fetchTasks();
-  }, [isSubmitted]);
-
-  useEffect(() => {
     setTitle(list?.title);
   }, []);
 
@@ -115,11 +100,9 @@ const ListCard = ({ list, isSubmitted, setIsSubmitted }: ListCardProps) => {
           />
         </div>
       </header>
-      {tasks
-        .filter((task: { list: string }) => task.list === list?._id)
-        .map((task: TaskProps) => (
-          <TaskCard task={task} setIsSubmitted={setIsSubmitted} key={task._id} />
-        ))}
+      {list?.tasks?.map((task: TaskProps) => (
+        <TaskCard task={task} setIsSubmitted={setIsSubmitted} key={task._id} />
+      ))}
       {!toggleAddTask ? (
         <CustomButton
           title='Add a task'
