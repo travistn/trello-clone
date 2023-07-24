@@ -1,5 +1,7 @@
 import { Schema, model, models } from 'mongoose';
 
+import Task from './task';
+
 const ListSchema = new Schema({
   title: {
     type: String,
@@ -8,7 +10,7 @@ const ListSchema = new Schema({
   tasks: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Task',
+      ref: Task,
     },
   ],
 });
