@@ -9,13 +9,12 @@ export const POST = async (req: Request) => {
 
   try {
     await connectToDb();
-    const newTask = new Task({ description, list });
+    const newTask = await new Task({ description, list }).save();
 
     const existingList = await List.findById(list);
 
-    existingList.tasks.push(newTask);
+    existingList.tasks.push(newTask._id);
 
-    await newTask.save();
     await existingList.save();
 
     return NextResponse.json(newTask, { status: 201 });
