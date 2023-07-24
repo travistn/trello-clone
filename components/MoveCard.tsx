@@ -16,7 +16,8 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
   const lists = useListStore((state) => state.lists);
   const list = lists.find((list) => task.list === list._id);
 
-  const [selected, setSelected] = useState(list);
+  const [selectedList, setSelectedList] = useState(list);
+  const [selectedPosition, setSelectedPostion] = useState(list?.tasks?.indexOf(task));
 
   const changeTaskList = async () => {
     setIsSubmitted(true);
@@ -26,7 +27,7 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
         method: 'PATCH',
         body: JSON.stringify({
           task: task,
-          list: selected?._id,
+          list: selectedList?._id,
           category: 'list',
         }),
       });
@@ -53,15 +54,15 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
         <div className='flex flex-row gap-2 w-full'>
           <Listbox
             as='div'
-            value={selected}
-            onChange={setSelected}
+            value={selectedList}
+            onChange={setSelectedList}
             className='bg-[#f1f2f4] rounded-[3px] relative w-[200px]'>
             <div className='flex flex-col px-2 py-1 rounded-[3px] hover:bg-gray-300'>
               <Listbox.Label className='text-[12px] text-light-navy cursor-pointer'>
                 List
               </Listbox.Label>
               <Listbox.Button className='text-left text-[14px] text-navy '>
-                {selected?.title}
+                {selectedList?.title}
               </Listbox.Button>
             </div>
             <Listbox.Options className='text-[14px] text-navy bg-white absolute w-full border border-gray-500'>
@@ -77,35 +78,30 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
               ))}
             </Listbox.Options>
           </Listbox>
-          <Listbox as='div' className='bg-[#f1f2f4] rounded-[3px] relative w-[80px]'>
+          <Listbox
+            as='div'
+            value={selectedPosition}
+            onChange={setSelectedPostion}
+            className='bg-[#f1f2f4] rounded-[3px] relative w-[80px]'>
             <div className='flex flex-col px-2 py-1 rounded-[3px] hover:bg-gray-300'>
               <Listbox.Label className='text-[12px] text-light-navy cursor-pointer'>
                 Position
               </Listbox.Label>
-              <Listbox.Button className='text-left text-[14px] text-navy '>1</Listbox.Button>
+              <Listbox.Button className='text-left text-[14px] text-navy '>
+                {selectedPosition ? selectedPosition + 1 : 0 + 1}
+              </Listbox.Button>
             </div>
             <Listbox.Options className='text-[14px] text-navy bg-white absolute w-full border border-gray-500'>
-              <Listbox.Option
-                value='1'
-                className={({ active }) =>
-                  `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
-                }>
-                1
-              </Listbox.Option>
-              <Listbox.Option
-                value='2'
-                className={({ active }) =>
-                  `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
-                }>
-                2
-              </Listbox.Option>
-              <Listbox.Option
-                value='3'
-                className={({ active }) =>
-                  `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-2`
-                }>
-                3
-              </Listbox.Option>
+              {list?.tasks?.map((_, index) => (
+                <Listbox.Option
+                  key={index}
+                  value={index}
+                  className={({ active }) =>
+                    `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-1`
+                  }>
+                  {selectedPosition === index ? `${index + 1} (current)` : `${index + 1}`}
+                </Listbox.Option>
+              ))}
             </Listbox.Options>
           </Listbox>
         </div>
