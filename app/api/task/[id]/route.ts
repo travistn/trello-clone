@@ -5,7 +5,7 @@ import Task from '@/models/task';
 import List from '@/models/list';
 
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
-  const { description, list, category, task } = await req.json();
+  const { description, list, category, task, tasks } = await req.json();
 
   try {
     await connectToDb();
@@ -33,6 +33,14 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
       await listImportingTask.save();
       await removeTaskFromList.save();
+    }
+
+    if (category === 'position') {
+      const existingList = await List.findById(list._id);
+
+      existingList.tasks = tasks;
+
+      existingList.save();
     }
 
     await existingTask.save();
