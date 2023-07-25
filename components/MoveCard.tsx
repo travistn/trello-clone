@@ -10,9 +10,10 @@ interface MoveCardProps {
   task: TaskProps;
   setOpenMove: (openMove: boolean) => void;
   setIsSubmitted: (isSubmitted: boolean) => void;
+  setToggleEdit: (toggle: boolean) => void;
 }
 
-const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
+const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCardProps) => {
   const lists = useListStore((state) => state.lists);
   const list = lists.find((list) => task.list === list._id);
 
@@ -38,6 +39,49 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
     }
   };
 
+  const moveIndexes = (arr: any, oldIndex: number, newIndex: number) => {
+    while (oldIndex < 0) {
+      oldIndex += arr.length;
+    }
+    while (newIndex < 0) {
+      newIndex += arr.length;
+    }
+    if (newIndex >= arr.length) {
+      var k = newIndex - arr.length;
+      while (k-- + 1) {
+        arr.push(undefined);
+      }
+    }
+    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+    return arr;
+  };
+
+  const updateTaskPosition = async () => {
+    setIsSubmitted(true);
+
+    try {
+      const changedTaskPositions = moveIndexes(
+        list?.tasks,
+        list?.tasks?.indexOf(task) as number,
+        selectedPosition as number
+      ).map((task: { _id: string }) => task._id);
+
+      await fetch(`/api/task/${task._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          list,
+          category: 'position',
+          tasks: changedTaskPositions,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setToggleEdit(false);
+      setIsSubmitted(false);
+    }
+  };
+
   return (
     <div className='p-3 bg-white rounded-[8px] w-[300px] cursor-default'>
       <header className='flex flex-row items-center'>
@@ -56,6 +100,7 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
             as='div'
             value={selectedList}
             onChange={setSelectedList}
+            id='list'
             className='bg-[#f1f2f4] rounded-[3px] relative w-[200px]'>
             <div className='flex flex-col px-2 py-1 rounded-[3px] hover:bg-gray-300'>
               <Listbox.Label className='text-[12px] text-light-navy cursor-pointer'>
@@ -82,6 +127,7 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
             as='div'
             value={selectedPosition}
             onChange={setSelectedPostion}
+            id='position'
             className='bg-[#f1f2f4] rounded-[3px] relative w-[80px]'>
             <div className='flex flex-col px-2 py-1 rounded-[3px] hover:bg-gray-300'>
               <Listbox.Label className='text-[12px] text-light-navy cursor-pointer'>
@@ -99,7 +145,7 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
                   className={({ active }) =>
                     `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-1`
                   }>
-                  {selectedPosition === index ? `${index + 1} (current)` : `${index + 1}`}
+                  {list?.tasks?.indexOf(task) === index ? `${index + 1} (current)` : `${index + 1}`}
                 </Listbox.Option>
               ))}
             </Listbox.Options>
@@ -110,7 +156,10 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted }: MoveCardProps) => {
         title='Move'
         containerStyles='w-fit bg-[#0c66e4] px-4 py-1.5 rounded-[4px] mt-3 hover:bg-[#0055CC]'
         textStyles='text-[14px] text-white'
-        handleClick={changeTaskList}
+        handleClick={() => {
+          if (selectedList?._id !== list?._id) changeTaskList();
+          else if (selectedPosition !== list?.tasks?.indexOf(task)) updateTaskPosition();
+        }}
       />
     </div>
   );
