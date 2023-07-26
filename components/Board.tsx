@@ -61,25 +61,29 @@ const Board = () => {
               : 'bg-white'
           }`}>
           {!toggleAddCard ? (
-            <CustomButton
-              title='Add another list'
-              containerStyles='w-full'
-              textStyles='text-white text-[14px]'
-              btnType='button'
-              plusIcon={true}
-              plusIconStyles='fill-white stroke-1 stroke-white'
-              handleClick={() => setToggleAddCard((prevState) => !prevState)}
-            />
+            <div className='h-[25px] transition-[height] duration-200 ease-in'>
+              <CustomButton
+                title='Add another list'
+                containerStyles='w-full'
+                textStyles='text-white text-[14px]'
+                btnType='button'
+                plusIcon={true}
+                plusIconStyles='fill-white stroke-1 stroke-white'
+                handleClick={() => setToggleAddCard((prevState) => !prevState)}
+              />
+            </div>
           ) : (
-            <Form
-              placeholder='Enter list title...'
-              btnTitle='Add list'
-              handleCloseClick={() => setToggleAddCard((prevState) => !prevState)}
-              list={list}
-              setList={setList}
-              handleSubmit={createList}
-              setToggle={setToggleAddCard}
-            />
+            <div className='h-[73px] transition-[height] duration-200 ease-in'>
+              <Form
+                placeholder='Enter list title...'
+                btnTitle='Add list'
+                handleCloseClick={() => setToggleAddCard((prevState) => !prevState)}
+                list={list}
+                setList={setList}
+                handleSubmit={createList}
+                setToggle={setToggleAddCard}
+              />
+            </div>
           )}
         </div>
       </div>
