@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Listbox } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
@@ -18,7 +18,7 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
   const list = lists.find((list) => task.list === list._id);
 
   const [selectedList, setSelectedList] = useState(list);
-  const [selectedPosition, setSelectedPostion] = useState(list?.tasks?.indexOf(task));
+  const [selectedPosition, setSelectedPostion] = useState(selectedList?.tasks?.indexOf(task));
 
   const changeTaskList = async () => {
     setIsSubmitted(true);
@@ -47,7 +47,7 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
       newIndex += arr.length;
     }
     if (newIndex >= arr.length) {
-      var k = newIndex - arr.length;
+      let k = newIndex - arr.length;
       while (k-- + 1) {
         arr.push(undefined);
       }
@@ -61,15 +61,15 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
 
     try {
       const changedTaskPositions = moveIndexes(
-        list?.tasks,
-        list?.tasks?.indexOf(task) as number,
+        selectedList?.tasks,
+        selectedList?.tasks?.indexOf(task) as number,
         selectedPosition as number
       ).map((task: { _id: string }) => task._id);
 
       await fetch(`/api/task/${task._id}`, {
         method: 'PATCH',
         body: JSON.stringify({
-          list,
+          list: selectedList,
           category: 'position',
           tasks: changedTaskPositions,
         }),
@@ -81,6 +81,12 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
       setIsSubmitted(false);
     }
   };
+
+  useEffect(() => {
+    if (selectedList?.tasks?.indexOf(task) === -1) setSelectedPostion(selectedList?.tasks?.length);
+    else if (selectedList?.tasks?.indexOf(task))
+      setSelectedPostion(selectedList?.tasks?.indexOf(task));
+  }, [selectedList]);
 
   return (
     <div className='p-3 bg-white rounded-[8px] w-[300px] cursor-default'>
@@ -134,20 +140,31 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
                 Position
               </Listbox.Label>
               <Listbox.Button className='text-left text-[14px] text-navy '>
-                {selectedPosition ? selectedPosition + 1 : 0 + 1}
+                {(selectedPosition as number) + 1}
               </Listbox.Button>
             </div>
             <Listbox.Options className='text-[14px] text-navy bg-white absolute w-full border border-gray-500'>
-              {list?.tasks?.map((_, index) => (
+              {selectedList?.tasks?.map((_, index) => (
                 <Listbox.Option
                   key={index}
                   value={index}
                   className={({ active }) =>
                     `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-1`
                   }>
-                  {list?.tasks?.indexOf(task) === index ? `${index + 1} (current)` : `${index + 1}`}
+                  {selectedList?.tasks?.indexOf(task) === index
+                    ? `${index + 1} (current)`
+                    : `${index + 1}`}
                 </Listbox.Option>
               ))}
+              {selectedList?._id !== list?._id && (
+                <Listbox.Option
+                  value={selectedList?.tasks?.length}
+                  className={({ active }) =>
+                    `${active ? 'text-white bg-[#388bff]' : 'text-navy'} px-1`
+                  }>
+                  {(selectedList?.tasks?.length as number) + 1}
+                </Listbox.Option>
+              )}
             </Listbox.Options>
           </Listbox>
         </div>
