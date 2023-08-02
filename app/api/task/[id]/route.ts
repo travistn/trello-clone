@@ -15,11 +15,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
     if (category === 'description') existingTask.description = description;
 
     if (category === 'list') {
-      existingTask.list = list;
-
-      const listImportingTask = await List.findById(list);
-
-      listImportingTask.tasks.push(existingTask);
+      existingTask.list = list._id;
 
       const removeTaskFromList = await List.findOneAndUpdate(
         { _id: task.list },
@@ -31,7 +27,11 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
         { safe: true }
       );
 
-      await listImportingTask.save();
+      const existingList = await List.findById(list._id);
+
+      existingList.tasks = tasks;
+
+      await existingList.save();
       await removeTaskFromList.save();
     }
 
@@ -40,7 +40,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
       existingList.tasks = tasks;
 
-      existingList.save();
+      await existingList.save();
     }
 
     await existingTask.save();
