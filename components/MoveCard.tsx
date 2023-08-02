@@ -20,25 +20,6 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
   const [selectedList, setSelectedList] = useState(list);
   const [selectedPosition, setSelectedPostion] = useState(selectedList?.tasks?.indexOf(task));
 
-  const changeTaskList = async () => {
-    setIsSubmitted(true);
-
-    try {
-      await fetch(`/api/task/${task._id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          task: task,
-          list: selectedList?._id,
-          category: 'list',
-        }),
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsSubmitted(false);
-    }
-  };
-
   const moveIndexes = (arr: any, oldIndex: number, newIndex: number) => {
     while (oldIndex < 0) {
       oldIndex += arr.length;
@@ -54,6 +35,35 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
     }
     arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
     return arr;
+  };
+
+  const changeTaskList = async () => {
+    setIsSubmitted(true);
+
+    const newTasks = [...(selectedList?.tasks ?? []), task];
+
+    const changedTaskPositions = moveIndexes(
+      newTasks,
+      newTasks?.indexOf(task) as number,
+      selectedPosition as number
+    ).map((task: { _id: string }) => task._id);
+
+    try {
+      await fetch(`/api/task/${task._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          list: selectedList,
+          task,
+          tasks: changedTaskPositions,
+          category: 'list',
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setToggleEdit(false);
+      setIsSubmitted(false);
+    }
   };
 
   const updateTaskPosition = async () => {
