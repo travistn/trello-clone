@@ -12,6 +12,12 @@ export interface TaskProps {
   list?: string;
 }
 
+export interface LabelProps {
+  color: string;
+  title?: string;
+  _id?: string;
+}
+
 export interface CustomButtonProps {
   title: string;
   btnType?: 'button' | 'submit';
