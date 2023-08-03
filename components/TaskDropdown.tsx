@@ -1,9 +1,10 @@
 import { useState, RefObject } from 'react';
 import { Menu } from '@headlessui/react';
-import { ArchiveBoxXMarkIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
+import { ArchiveBoxXMarkIcon, ArrowRightIcon, TagIcon } from '@heroicons/react/24/solid';
 
 import { TaskProps } from '@/types';
 import MoveCard from './MoveCard';
+import Labels from './Labels';
 
 interface TaskDropDownProps {
   task: TaskProps;
@@ -13,6 +14,7 @@ interface TaskDropDownProps {
 
 const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps) => {
   const [openMove, setOpenMove] = useState(false);
+  const [openLabels, setOpenLabels] = useState(false);
 
   const deleteTask = async () => {
     const hasConfirmed = confirm('Are you sure you want to delete this task?');
@@ -64,13 +66,32 @@ const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps
             )}
           </Menu.Item>
           {openMove && (
-            <div className='absolute mt-2'>
+            <div className='absolute mt-2 z-10'>
               <MoveCard
                 task={task}
                 setOpenMove={setOpenMove}
                 setIsSubmitted={setIsSubmitted}
                 setToggleEdit={setToggleEdit}
               />
+            </div>
+          )}
+        </div>
+        <div className='relative'>
+          <Menu.Item as='div' className='relative'>
+            {({ active }) => (
+              <button
+                className={`${
+                  active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
+                } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5 transition-transform duration-100 ease-in hover:translate-x-1`}
+                onClick={() => setOpenLabels((prevState) => !prevState)}>
+                <TagIcon className={`${active ? 'stroke-white' : 'stroke-[#c7d1db]'} w-[13px]`} />
+                Edit Labels
+              </button>
+            )}
+          </Menu.Item>
+          {openLabels && (
+            <div className='absolute mt-2 z-10'>
+              <Labels setOpenLabels={setOpenLabels} />
             </div>
           )}
         </div>
