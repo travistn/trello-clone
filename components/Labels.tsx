@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { XMarkIcon, PencilIcon } from '@heroicons/react/24/solid';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 
-import { LabelProps } from '@/types';
+import { LabelProps, TaskProps } from '@/types';
+import LabelCard from './LabelCard';
 
 interface LabelsProps {
+  task: TaskProps;
   setOpenLabels: (toggle: boolean) => void;
 }
 
-const Labels = ({ setOpenLabels }: LabelsProps) => {
+const Labels = ({ task, setOpenLabels }: LabelsProps) => {
   const [labels, setLabels] = useState([]);
 
   useEffect(() => {
@@ -34,13 +36,7 @@ const Labels = ({ setOpenLabels }: LabelsProps) => {
       </header>
       <div className='flex flex-col gap-2 mt-2'>
         {labels.map((label: LabelProps) => (
-          <div key={label._id} className='flex flex-row items-center justify-between gap-2 pl-2'>
-            <input type='checkbox' className='w-4 h-4 cursor-pointer' />
-            <div className={`w-[210px] h-[30px] bg-${label.color} rounded-[3px]`} />
-            <div className='rounded-[3px] p-2 cursor-pointer hover:bg-gray-300'>
-              <PencilIcon className='w-[11px] fill-white stroke-light-navy stroke-2' />
-            </div>
-          </div>
+          <LabelCard label={label} task={task} key={label._id} />
         ))}
       </div>
     </div>
