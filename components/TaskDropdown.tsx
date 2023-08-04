@@ -91,7 +91,7 @@ const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps
           </Menu.Item>
           {openLabels && (
             <div className='absolute mt-2 z-10'>
-              <Labels task={task} setOpenLabels={setOpenLabels} />
+              <Labels task={task} setOpenLabels={setOpenLabels} setIsSubmitted={setIsSubmitted} />
             </div>
           )}
         </div>

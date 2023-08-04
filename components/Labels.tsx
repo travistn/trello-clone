@@ -7,9 +7,10 @@ import LabelCard from './LabelCard';
 interface LabelsProps {
   task: TaskProps;
   setOpenLabels: (toggle: boolean) => void;
+  setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const Labels = ({ task, setOpenLabels }: LabelsProps) => {
+const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
   const [labels, setLabels] = useState([]);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const Labels = ({ task, setOpenLabels }: LabelsProps) => {
       </header>
       <div className='flex flex-col gap-2 mt-2'>
         {labels.map((label: LabelProps) => (
-          <LabelCard label={label} task={task} key={label._id} />
+          <LabelCard label={label} task={task} key={label._id} setIsSubmitted={setIsSubmitted} />
         ))}
       </div>
     </div>
