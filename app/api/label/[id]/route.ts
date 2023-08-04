@@ -4,14 +4,20 @@ import { connectToDb } from '@/utils/database';
 import Task from '@/models/task';
 
 export const PATCH = async (req: Request) => {
-  const { label, task } = await req.json();
+  const { label, task, action } = await req.json();
 
   try {
     await connectToDb();
 
     const existingTask = await Task.findById(task._id);
 
-    await existingTask.labels.push(label._id);
+    if (action === 'addLabel') {
+      await existingTask.labels.push(label._id);
+    }
+
+    if (action === 'removeLabel') {
+      await existingTask.labels.splice(existingTask.labels.indexOf(label._id), 1);
+    }
 
     await existingTask.save();
 
