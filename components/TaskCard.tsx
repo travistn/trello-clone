@@ -43,13 +43,25 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
   }, []);
 
   return (
-    <div className='bg-white w-full h-fit p-2 flex flex-row items-center justify-between rounded-[8px] shadow-md cursor-pointer group relative hover:bg-gray-200'>
-      <p className='text-[14px] text-navy pl-1 leading-5'>{task.description}</p>
-      <div className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover:visible'>
-        <PencilIcon
-          className='w-[11px] fill-white stroke-light-navy stroke-2'
-          onClick={() => setToggleEdit((prevState) => !prevState)}
-        />
+    <div className='bg-white w-full h-fit p-2 flex flex-col rounded-[8px] shadow-md cursor-pointer group relative hover:bg-gray-200'>
+      {(task?.labels?.length as number) > 0 && (
+        <div className='flex flex-row flex-wrap gap-1 pl-1 mb-1'>
+          {task?.labels?.map((label) => (
+            <div
+              key={label._id}
+              className={`h-[6.5px] min-w-[40px] max-w-[40px] rounded-[8px] bg-${label.color}`}
+            />
+          ))}
+        </div>
+      )}
+      <div className='flex flex-row items-center justify-between'>
+        <p className='text-[14px] text-navy pl-1 leading-5'>{task.description}</p>
+        <div className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover:visible'>
+          <PencilIcon
+            className='w-[11px] fill-white stroke-light-navy stroke-2'
+            onClick={() => setToggleEdit((prevState) => !prevState)}
+          />
+        </div>
       </div>
       {toggleEdit && (
         <div className='flex flex-col w-full absolute top-0 left-0 z-10'>
