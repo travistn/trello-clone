@@ -7,9 +7,10 @@ interface LabelCardProps {
   label: LabelProps;
   task: TaskProps;
   setIsSubmitted: (isSubmitted: boolean) => void;
+  setToggleEditLabel: (toggle: boolean) => void;
 }
 
-const LabelCard = ({ label, task, setIsSubmitted }: LabelCardProps) => {
+const LabelCard = ({ label, task, setIsSubmitted, setToggleEditLabel }: LabelCardProps) => {
   const [labelChecked, setLabelChecked] = useState(false);
 
   const handleLabelCheck = () => {
@@ -54,7 +55,10 @@ const LabelCard = ({ label, task, setIsSubmitted }: LabelCardProps) => {
         onClick={handleLabelCheck}
       />
       <div className='rounded-[3px] p-2 cursor-pointer hover:bg-gray-300'>
-        <PencilIcon className='w-[11px] fill-white stroke-light-navy stroke-2' />
+        <PencilIcon
+          className='w-[11px] fill-white stroke-light-navy stroke-2'
+          onClick={() => setToggleEditLabel(true)}
+        />
       </div>
     </div>
   );
