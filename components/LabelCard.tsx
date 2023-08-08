@@ -8,9 +8,16 @@ interface LabelCardProps {
   task: TaskProps;
   setIsSubmitted: (isSubmitted: boolean) => void;
   setToggleEditLabel: (toggle: boolean) => void;
+  setSelectedLabel: (label: LabelProps) => void;
 }
 
-const LabelCard = ({ label, task, setIsSubmitted, setToggleEditLabel }: LabelCardProps) => {
+const LabelCard = ({
+  label,
+  task,
+  setIsSubmitted,
+  setToggleEditLabel,
+  setSelectedLabel,
+}: LabelCardProps) => {
   const [labelChecked, setLabelChecked] = useState(false);
 
   const handleLabelCheck = () => {
@@ -57,7 +64,10 @@ const LabelCard = ({ label, task, setIsSubmitted, setToggleEditLabel }: LabelCar
       <div className='rounded-[3px] p-2 cursor-pointer hover:bg-gray-300'>
         <PencilIcon
           className='w-[11px] fill-white stroke-light-navy stroke-2'
-          onClick={() => setToggleEditLabel(true)}
+          onClick={() => {
+            setToggleEditLabel(true);
+            setSelectedLabel(label);
+          }}
         />
       </div>
     </div>
