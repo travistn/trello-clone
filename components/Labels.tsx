@@ -98,6 +98,7 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
               autoFocus
               value={labelTitle}
               onChange={(e) => setLabelTitle(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && editLabel()}
               className='text-[14px] text-navy px-2 py-1.5 border-2 border-[#dcdfe4] rounded-[3px] focus:outline-[#1D7AFC]'
             />
             <CustomButton
