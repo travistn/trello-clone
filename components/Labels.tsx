@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, KeyboardEventHandler } from 'react';
 import { XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
 
 import { LabelProps, TaskProps } from '@/types';
@@ -44,6 +44,10 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
     };
 
     fetchLabels();
+  }, [toggleEditLabel]);
+
+  useEffect(() => {
+    setLabelTitle(selectedLabel?.title as string);
   }, [toggleEditLabel]);
 
   return (
@@ -92,6 +96,7 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
             <label className='text-[12px] text-light-navy font-semibold'>Title</label>
             <input
               autoFocus
+              value={labelTitle}
               onChange={(e) => setLabelTitle(e.target.value)}
               className='text-[14px] text-navy px-2 py-1.5 border-2 border-[#dcdfe4] rounded-[3px] focus:outline-[#1D7AFC]'
             />
