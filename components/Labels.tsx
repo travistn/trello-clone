@@ -3,6 +3,7 @@ import { XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
 
 import { LabelProps, TaskProps } from '@/types';
 import LabelCard from './LabelCard';
+import CustomButton from './CustomButton';
 
 interface LabelsProps {
   task: TaskProps;
@@ -13,6 +14,8 @@ interface LabelsProps {
 const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
   const [labels, setLabels] = useState([]);
   const [selectedLabel, setSelectedLabel] = useState<LabelProps>();
+
+  const [labelTitle, setLabelTitle] = useState({ title: '' });
   const [toggleEditLabel, setToggleEditLabel] = useState(false);
 
   useEffect(() => {
@@ -65,6 +68,20 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
           <div className='bg-[#f7f8f9] p-8 flex justify-center items-center'>
             <div className={`w-[230px] h-[30px] bg-${selectedLabel?.color} rounded-[3px]`} />
           </div>
+          <form className='flex flex-col gap-1 p-3 w-full'>
+            <label className='text-[12px] text-light-navy font-semibold'>Title</label>
+            <input
+              autoFocus
+              onChange={(e) => setLabelTitle({ title: e.target.value })}
+              className='text-[14px] text-navy px-2 py-1.5 border-2 border-[#dcdfe4] rounded-[3px] focus:outline-[#1D7AFC]'
+            />
+            <CustomButton
+              title='Save'
+              containerStyles='w-fit bg-[#0c66e4] px-4 py-1.5 rounded-[3px] mt-1.5 hover:bg-[#0055CC]'
+              textStyles='text-[14px] text-white'
+              btnType='submit'
+            />
+          </form>
         </div>
       )}
     </div>
