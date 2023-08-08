@@ -83,7 +83,10 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
       ) : (
         <div className='flex flex-col gap-2'>
           <div className='bg-[#f7f8f9] p-8 flex justify-center items-center'>
-            <div className={`w-[230px] h-[30px] bg-${selectedLabel?.color} rounded-[3px]`} />
+            <div
+              className={`w-[230px] h-[32px] bg-${selectedLabel?.color} rounded-[3px] text-[14px] font-medium pl-3 flex items-center text-ellipsis whitespace-nowrap`}>
+              {selectedLabel?.title}
+            </div>
           </div>
           <div className='flex flex-col gap-1 p-3 w-full'>
             <label className='text-[12px] text-light-navy font-semibold'>Title</label>
