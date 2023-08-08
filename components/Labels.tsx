@@ -12,6 +12,7 @@ interface LabelsProps {
 
 const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
   const [labels, setLabels] = useState([]);
+  const [selectedLabel, setSelectedLabel] = useState<LabelProps>();
   const [toggleEditLabel, setToggleEditLabel] = useState(false);
 
   useEffect(() => {
@@ -26,8 +27,8 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
   }, []);
 
   return (
-    <div className='p-3 bg-white rounded-[8px] w-[300px] cursor-default'>
-      <header className='flex flex-row items-center'>
+    <div className='bg-white rounded-[8px] w-[300px] cursor-default'>
+      <header className='flex flex-row items-center p-3'>
         {toggleEditLabel && (
           <div className='rounded-md p-1.5 hover:bg-gray-300 hover:cursor-pointer'>
             <ChevronLeftIcon
@@ -37,7 +38,7 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
           </div>
         )}
         <h3 className='text-[14px] text-light-navy font-semibold ml-auto'>
-          {!toggleEditLabel ? 'Labels' : 'Edit Labels'}
+          {!toggleEditLabel ? 'Labels' : 'Edit label'}
         </h3>
         <div className='rounded-md p-1.5 ml-auto hover:bg-gray-300 hover:cursor-pointer'>
           <XMarkIcon
@@ -47,7 +48,7 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
         </div>
       </header>
       {!toggleEditLabel ? (
-        <div className='flex flex-col gap-2 mt-2'>
+        <div className='flex flex-col gap-2 px-3 pb-3'>
           {labels.map((label: LabelProps) => (
             <LabelCard
               label={label}
@@ -55,11 +56,16 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
               key={label._id}
               setIsSubmitted={setIsSubmitted}
               setToggleEditLabel={setToggleEditLabel}
+              setSelectedLabel={setSelectedLabel}
             />
           ))}
         </div>
       ) : (
-        <div></div>
+        <div className='flex flex-col gap-2'>
+          <div className='bg-[#f7f8f9] p-8 flex justify-center items-center'>
+            <div className={`w-[230px] h-[30px] bg-${selectedLabel?.color} rounded-[3px]`} />
+          </div>
+        </div>
       )}
     </div>
   );
