@@ -96,7 +96,7 @@ const Labels = ({ task, setOpenLabels, setIsSubmitted }: LabelsProps) => {
             <label className='text-[12px] text-light-navy font-semibold'>Title</label>
             <input
               autoFocus
-              value={labelTitle}
+              value={labelTitle || ''}
               onChange={(e) => setLabelTitle(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && editLabel()}
               className='text-[14px] text-navy px-2 py-1.5 border-2 border-[#dcdfe4] rounded-[3px] focus:outline-[#1D7AFC]'
