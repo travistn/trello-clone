@@ -1,4 +1,5 @@
 import { useState, useEffect, FormEvent, KeyboardEventHandler } from 'react';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 import TaskCard from './TaskCard';
@@ -8,10 +9,11 @@ import { ListProps, TaskProps } from '@/types';
 
 interface ListCardProps {
   list: ListProps;
+  index: number;
   setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
+const ListCard = ({ list, index, setIsSubmitted }: ListCardProps) => {
   const [task, setTask] = useState({ description: '' });
   const [title, setTitle] = useState('');
   const [toggleAddTask, setToggleAddTask] = useState(false);
@@ -81,50 +83,58 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
   }, []);
 
   return (
-    <div className='bg-[#f1f2f4] w-[272px] h-max flex flex-col gap-3 rounded-[12px] p-2 select-none md:min-w-[272px]'>
-      <header className='flex flex-row justify-between items-center pl-2'>
-        <h2 className='text-[14px] text-dark-navy font-semibold'>
-          <textarea
-            value={title}
-            onChange={(e) => setTitle?.(e.target.value)}
-            onKeyDown={updateTitle}
-            onFocus={(e) => e.target.select()}
-            spellCheck={false}
-            className='overflow-hidden h-[28px] rounded-[3px] resize-none p-1 mb-[-0.3rem] bg-inherit outline-[#1D7AFC] whitespace-nowrap'
-          />
-        </h2>
-        <div className='rounded-md p-1.5 mr-[0.1rem] hover:bg-gray-300'>
-          <XMarkIcon
-            className='w-[14px] text-navy cursor-pointer stroke-navy stroke-[0.5]'
-            onClick={handleDelete}
-          />
+    <Draggable draggableId={list.title} index={index}>
+      {(provided) => (
+        <div
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          className='bg-[#f1f2f4] w-[272px] h-max flex flex-col gap-3 rounded-[12px] p-2 select-none md:min-w-[272px]'>
+          <header className='flex flex-row justify-between items-center pl-2'>
+            <h2 className='text-[14px] text-dark-navy font-semibold'>
+              <textarea
+                value={title}
+                onChange={(e) => setTitle?.(e.target.value)}
+                onKeyDown={updateTitle}
+                onFocus={(e) => e.target.select()}
+                spellCheck={false}
+                className='overflow-hidden h-[28px] rounded-[3px] resize-none p-1 mb-[-0.3rem] bg-inherit outline-[#1D7AFC] whitespace-nowrap'
+              />
+            </h2>
+            <div className='rounded-md p-1.5 mr-[0.1rem] hover:bg-gray-300'>
+              <XMarkIcon
+                className='w-[14px] text-navy cursor-pointer stroke-navy stroke-[0.5]'
+                onClick={handleDelete}
+              />
+            </div>
+          </header>
+          {list?.tasks?.map((task: TaskProps) => (
+            <TaskCard task={task} setIsSubmitted={setIsSubmitted} key={task._id} />
+          ))}
+          {!toggleAddTask ? (
+            <CustomButton
+              title='Add a task'
+              containerStyles='w-full px-2 py-1 rounded-[8px] hover:bg-gray-300'
+              textStyles='text-light-navy text-[14px]'
+              btnType='button'
+              plusIcon={true}
+              plusIconStyles='fill-light-navy stroke-[0.5] stroke-light-navy'
+              handleClick={() => setToggleAddTask((prevState) => !prevState)}
+            />
+          ) : (
+            <Form
+              placeholder='Enter a task...'
+              btnTitle='Add task'
+              handleCloseClick={() => setToggleAddTask((prevState) => !prevState)}
+              task={task}
+              setTask={setTask}
+              handleSubmit={createTask}
+              setToggle={setToggleAddTask}
+            />
+          )}
         </div>
-      </header>
-      {list?.tasks?.map((task: TaskProps) => (
-        <TaskCard task={task} setIsSubmitted={setIsSubmitted} key={task._id} />
-      ))}
-      {!toggleAddTask ? (
-        <CustomButton
-          title='Add a task'
-          containerStyles='w-full px-2 py-1 rounded-[8px] hover:bg-gray-300'
-          textStyles='text-light-navy text-[14px]'
-          btnType='button'
-          plusIcon={true}
-          plusIconStyles='fill-light-navy stroke-[0.5] stroke-light-navy'
-          handleClick={() => setToggleAddTask((prevState) => !prevState)}
-        />
-      ) : (
-        <Form
-          placeholder='Enter a task...'
-          btnTitle='Add task'
-          handleCloseClick={() => setToggleAddTask((prevState) => !prevState)}
-          task={task}
-          setTask={setTask}
-          handleSubmit={createTask}
-          setToggle={setToggleAddTask}
-        />
       )}
-    </div>
+    </Draggable>
   );
 };
 

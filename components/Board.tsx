@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, FormEvent } from 'react';
+import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 
 import ListCard from './ListCard';
 import CustomButton from './CustomButton';
@@ -35,9 +36,27 @@ const Board = () => {
     }
   };
 
+  const handleOnDragEnd = (result: DropResult) => {
+    const { destination, source, type } = result;
+
+    if (!destination) return;
+
+    if (type === 'list') {
+      const result = Array.from(lists);
+      const [removed] = result.splice(source.index, 1);
+      result.splice(destination.index, 0, removed);
+
+      const rearrangedLists = result.map((list) => list);
+
+      setLists(rearrangedLists);
+    }
+  };
+
   useEffect(() => {
     const fetchLists = async () => {
-      const response = await fetch('/api/list');
+      const response = await fetch('/api/list', {
+        method: 'GET',
+      });
       const data = await response.json();
 
       setLists(data);
@@ -48,45 +67,55 @@ const Board = () => {
 
   return (
     <div className='w-full h-full px-8 pt-8 pb-14 max-sm:pb-8'>
-      <div className='h-full flex flex-row gap-4 scrollbar max-sm:flex-col max-sm:items-center md:overflow-x-auto'>
-        {lists?.map((list) => (
-          <div className='h-full pb-1.5' key={list?._id}>
-            <ListCard list={list} setIsSubmitted={setIsSubmitted} />
-          </div>
-        ))}
-        <div
-          className={`w-[272px] h-max rounded-[12px] px-4 py-3 md:min-w-[272px] ${
-            !toggleAddCard
-              ? 'bg-[#68758b] cursor-pointer transition-colors duration-100 ease-in hover:bg-[#A6C5E229] '
-              : 'bg-white'
-          }`}>
-          {!toggleAddCard ? (
-            <div className='h-[25px] transition-[height] duration-200 ease-in'>
-              <CustomButton
-                title='Add another list'
-                containerStyles='w-full'
-                textStyles='text-white text-[14px]'
-                btnType='button'
-                plusIcon={true}
-                plusIconStyles='fill-white stroke-1 stroke-white'
-                handleClick={() => setToggleAddCard((prevState) => !prevState)}
-              />
-            </div>
-          ) : (
-            <div className='h-[73px] transition-[height] duration-200 ease-in'>
-              <Form
-                placeholder='Enter list title...'
-                btnTitle='Add list'
-                handleCloseClick={() => setToggleAddCard((prevState) => !prevState)}
-                list={list}
-                setList={setList}
-                handleSubmit={createList}
-                setToggle={setToggleAddCard}
-              />
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId='board' direction='horizontal' type='list'>
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className='h-full flex flex-row gap-4 scrollbar max-sm:flex-col max-sm:items-center md:overflow-x-auto'>
+              {lists?.map((list, index) => (
+                <div className='h-full pb-1.5' key={list?._id}>
+                  <ListCard list={list} index={index} setIsSubmitted={setIsSubmitted} />
+                </div>
+              ))}
+              <div
+                className={`w-[272px] h-max rounded-[12px] px-4 py-3 md:min-w-[272px] ${
+                  !toggleAddCard
+                    ? 'bg-[#68758b] cursor-pointer transition-colors duration-100 ease-in hover:bg-[#A6C5E229] '
+                    : 'bg-white'
+                }`}>
+                {!toggleAddCard ? (
+                  <div className='h-[25px] transition-[height] duration-200 ease-in'>
+                    <CustomButton
+                      title='Add another list'
+                      containerStyles='w-full'
+                      textStyles='text-white text-[14px]'
+                      btnType='button'
+                      plusIcon={true}
+                      plusIconStyles='fill-white stroke-1 stroke-white'
+                      handleClick={() => setToggleAddCard((prevState) => !prevState)}
+                    />
+                  </div>
+                ) : (
+                  <div className='h-[73px] transition-[height] duration-200 ease-in'>
+                    <Form
+                      placeholder='Enter list title...'
+                      btnTitle='Add list'
+                      handleCloseClick={() => setToggleAddCard((prevState) => !prevState)}
+                      list={list}
+                      setList={setList}
+                      handleSubmit={createList}
+                      setToggle={setToggleAddCard}
+                    />
+                  </div>
+                )}
+              </div>
+              {provided.placeholder}
             </div>
           )}
-        </div>
-      </div>
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 };
