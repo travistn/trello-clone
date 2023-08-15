@@ -25,6 +25,7 @@ const Board = () => {
         method: 'POST',
         body: JSON.stringify({
           title: list.title,
+          order: lists.length + 1,
         }),
       });
     } catch (error) {
