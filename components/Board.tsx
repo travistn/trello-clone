@@ -37,7 +37,7 @@ const Board = () => {
     }
   };
 
-  const handleOnDragEnd = (result: DropResult) => {
+  const handleOnDragEnd = async (result: DropResult) => {
     const { destination, source, type } = result;
 
     if (!destination) return;
@@ -47,7 +47,7 @@ const Board = () => {
       const [removed] = result.splice(source.index, 1);
       result.splice(destination.index, 0, removed);
 
-      const rearrangedLists = result.map((list) => list);
+      const rearrangedLists = result.map((list, index) => ({ ...list, order: index + 1 }));
 
       setLists(rearrangedLists);
     }
