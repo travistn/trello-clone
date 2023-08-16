@@ -13,6 +13,7 @@ const ListSchema = new Schema({
       ref: Task,
     },
   ],
+  order: { type: Number, required: [true, 'An order is required.'] },
 });
 
 const List = models.List || model('List', ListSchema);
