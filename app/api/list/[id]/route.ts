@@ -1,3 +1,5 @@
+import { NextResponse } from 'next/server';
+
 import { connectToDb } from '@/utils/database';
 import List from '@/models/list';
 import Task from '@/models/task';
@@ -10,30 +12,30 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
 
     await Task.deleteMany({ list: params.id });
 
-    return new Response('List deleted successfully', { status: 200 });
+    return NextResponse.json('List deleted successfully', { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify('Failed to delete list.'), {
-      status: 500,
-    });
+    return NextResponse.json('Failed to delete list.', { status: 500 });
   }
 };
 
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
-  const { title } = await req.json();
+  const { list, title, action } = await req.json();
 
   try {
     await connectToDb();
 
     const existingList = await List.findById(params.id);
 
-    existingList.title = title;
+    if (action === 'updateTitle') existingList.title = title;
+
+    if (action === 'updateOrder') {
+      existingList.order = list.order;
+    }
 
     await existingList.save();
 
-    return new Response('Successfully updated the title', { status: 200 });
+    return NextResponse.json('Successfully updated the title', { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify('Failed to update the title.'), {
-      status: 500,
-    });
+    return NextResponse.json('Failed to update the title.'), { status: 500 };
   }
 };
