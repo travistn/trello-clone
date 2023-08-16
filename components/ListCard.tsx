@@ -47,6 +47,7 @@ const ListCard = ({ list, index, setIsSubmitted }: ListCardProps) => {
           method: 'PATCH',
           body: JSON.stringify({
             title,
+            action: 'updateTitle',
           }),
         });
       } catch (error) {
@@ -81,6 +82,20 @@ const ListCard = ({ list, index, setIsSubmitted }: ListCardProps) => {
   useEffect(() => {
     setTitle(list?.title);
   }, []);
+
+  useEffect(() => {
+    const updateListOrder = async () => {
+      await fetch(`/api/list/${list._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          list,
+          action: 'updateOrder',
+        }),
+      });
+    };
+
+    updateListOrder();
+  }, [list?.order]);
 
   return (
     <Draggable draggableId={list.title} index={index}>
