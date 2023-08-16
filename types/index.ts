@@ -4,6 +4,7 @@ export interface ListProps {
   title: string;
   _id?: string;
   tasks?: TaskProps[];
+  order?: number;
 }
 
 export interface TaskProps {
