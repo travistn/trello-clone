@@ -80,6 +80,7 @@ const Board = () => {
                   <ListCard list={list} index={index} setIsSubmitted={setIsSubmitted} />
                 </div>
               ))}
+              {provided.placeholder}
               <div
                 className={`w-[272px] h-max rounded-[12px] px-4 py-3 md:min-w-[272px] ${
                   !toggleAddCard
@@ -112,7 +113,6 @@ const Board = () => {
                   </div>
                 )}
               </div>
-              {provided.placeholder}
             </div>
           )}
         </Droppable>
