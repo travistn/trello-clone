@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, FormEvent } from 'react';
-import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import ListCard from './ListCard';
 import CustomButton from './CustomButton';
@@ -76,9 +76,17 @@ const Board = () => {
               ref={provided.innerRef}
               className='h-full flex flex-row gap-4 scrollbar max-sm:flex-col max-sm:items-center md:overflow-x-auto'>
               {lists?.map((list, index) => (
-                <div className='h-full pb-1.5' key={list?._id}>
-                  <ListCard list={list} index={index} setIsSubmitted={setIsSubmitted} />
-                </div>
+                <Draggable draggableId={list._id as string} index={index} key={list._id}>
+                  {(provided) => (
+                    <div
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      className='h-full pb-1.5'>
+                      <ListCard list={list} setIsSubmitted={setIsSubmitted} />
+                    </div>
+                  )}
+                </Draggable>
               ))}
               {provided.placeholder}
               <div
