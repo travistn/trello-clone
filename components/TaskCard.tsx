@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
+import {
+  DraggableProvidedDragHandleProps,
+  DraggableProvidedDraggableProps,
+} from 'react-beautiful-dnd';
 import { PencilIcon } from '@heroicons/react/24/solid';
 
 import { TaskProps } from '@/types';
@@ -10,9 +14,18 @@ import Tooltip from './Tooltip';
 interface TaskCardProps {
   task: TaskProps;
   setIsSubmitted: (isSubmitted: boolean) => void;
+  innerRef: (element: HTMLElement | null) => void;
+  draggableProps: DraggableProvidedDraggableProps;
+  dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
 }
 
-const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
+const TaskCard = ({
+  task,
+  setIsSubmitted,
+  draggableProps,
+  dragHandleProps,
+  innerRef,
+}: TaskCardProps) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [description, setDescription] = useState('');
 
@@ -44,7 +57,11 @@ const TaskCard = ({ task, setIsSubmitted }: TaskCardProps) => {
   }, []);
 
   return (
-    <div className='bg-white w-full h-fit p-2 flex flex-col rounded-[8px] shadow-md cursor-pointer group/task relative hover:bg-gray-200'>
+    <div
+      {...draggableProps}
+      {...dragHandleProps}
+      ref={innerRef}
+      className='bg-white w-full h-fit p-2 flex flex-col rounded-[8px] shadow-md cursor-pointer group/task relative hover:bg-gray-200'>
       {(task?.labels?.length as number) > 0 && (
         <div className='flex flex-row flex-wrap gap-1 pl-1 mb-1'>
           {task?.labels?.map((label) => (
