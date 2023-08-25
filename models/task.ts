@@ -12,6 +12,10 @@ const TaskSchema = new Schema({
     ref: 'List',
   },
   labels: [{ type: Schema.Types.ObjectId, ref: Label }],
+  order: {
+    type: Number,
+    required: [true, 'An order is required.'],
+  },
 });
 
 const Task = models.Task || model('Task', TaskSchema);
