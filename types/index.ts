@@ -12,6 +12,7 @@ export interface TaskProps {
   _id?: string;
   list?: string;
   labels?: LabelProps[];
+  order?: number;
 }
 
 export interface LabelProps {
