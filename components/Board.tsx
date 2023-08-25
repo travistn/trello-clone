@@ -7,6 +7,7 @@ import ListCard from './ListCard';
 import CustomButton from './CustomButton';
 import Form from './Form';
 import useListStore from '@/store/store';
+import { TaskProps } from '@/types';
 
 const Board = () => {
   const [list, setList] = useState({ title: '' });
@@ -37,7 +38,7 @@ const Board = () => {
     }
   };
 
-  const handleOnDragEnd = async (result: DropResult) => {
+  const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
 
     if (!destination) return;
@@ -50,6 +51,20 @@ const Board = () => {
       const rearrangedLists = result.map((list, index) => ({ ...list, order: index + 1 }));
 
       setLists(rearrangedLists);
+    }
+
+    if (type === 'task') {
+      let list = lists.find((list) => list._id === source.droppableId);
+
+      const result = Array.from(list?.tasks as ArrayLike<TaskProps>);
+      const [removed] = result.splice(source.index, 1);
+      result.splice(destination.index, 0, removed);
+
+      const rearrangedTasks = result.map((task, index) => ({ ...task, order: index + 1 }));
+
+      setLists(
+        lists.map((item) => (item._id === list?._id ? { ...item, tasks: rearrangedTasks } : item))
+      );
     }
   };
 
@@ -82,7 +97,7 @@ const Board = () => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       ref={provided.innerRef}
-                      className='h-full pb-1.5'>
+                      className='pb-1.5'>
                       <ListCard list={list} setIsSubmitted={setIsSubmitted} />
                     </div>
                   )}
