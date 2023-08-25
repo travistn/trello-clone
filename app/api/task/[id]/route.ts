@@ -5,7 +5,7 @@ import Task from '@/models/task';
 import List from '@/models/list';
 
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
-  const { description, list, category, task, tasks } = await req.json();
+  const { description, list, category, task, tasks, action, id } = await req.json();
 
   try {
     await connectToDb();
@@ -41,6 +41,10 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       existingList.tasks = tasks;
 
       await existingList.save();
+    }
+
+    if (action === 'updateTaskOrder') {
+      existingTask.order = task.order;
     }
 
     await existingTask.save();
