@@ -10,7 +10,7 @@ export const GET = async () => {
     await connectToDb();
 
     const lists = await List.find({})
-      .populate({ path: 'tasks', populate: { path: 'labels' } })
+      .populate({ path: 'tasks', options: { sort: { order: 1 } }, populate: { path: 'labels' } })
       .sort({ order: 1 });
 
     return NextResponse.json(lists, { status: 200 });
