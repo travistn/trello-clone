@@ -56,6 +56,19 @@ const TaskCard = ({
     setDescription(task.description);
   }, []);
 
+  useEffect(() => {
+    const updateTaskOrder = async () => {
+      await fetch(`/api/task/${task._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          task,
+          action: 'updateTaskOrder',
+        }),
+      });
+    };
+    updateTaskOrder();
+  }, [task.order]);
+
   return (
     <div
       {...draggableProps}
