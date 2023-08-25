@@ -67,6 +67,7 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
         body: JSON.stringify({
           description: task.description,
           list: list._id,
+          order: (list?.tasks?.length as number) + 1,
         }),
       });
     } catch (error) {
@@ -97,7 +98,7 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
   }, [list?.order]);
 
   return (
-    <Droppable droppableId={list._id as string} direction='vertical'>
+    <Droppable droppableId={list._id as string} direction='vertical' type='task'>
       {(provided) => (
         <div
           {...provided.droppableProps}
