@@ -5,11 +5,11 @@ import Task from '@/models/task';
 import List from '@/models/list';
 
 export const POST = async (req: Request) => {
-  const { description, list } = await req.json();
+  const { description, list, order } = await req.json();
 
   try {
     await connectToDb();
-    const newTask = await new Task({ description, list }).save();
+    const newTask = await new Task({ description, list, order }).save();
 
     const existingList = await List.findById(list);
 
