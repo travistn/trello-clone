@@ -19,7 +19,7 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
 };
 
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
-  const { list, title, action } = await req.json();
+  const { list, title, task, source_id, action } = await req.json();
 
   try {
     await connectToDb();
@@ -30,6 +30,55 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     if (action === 'updateOrder') {
       existingList.order = list.order;
+    }
+
+    if (action === 'removeTask') {
+      await List.findOneAndUpdate(
+        { _id: task.list },
+        {
+          $pull: {
+            tasks: task._id,
+          },
+        },
+        { safe: true }
+      );
+    }
+
+    if (action === 'addTask') {
+      const existingTask = await Task.findById(task._id);
+
+      existingList.tasks.push(task._id);
+
+      existingTask.list = params.id;
+
+      await existingTask.save();
+    }
+
+    if (action == 'removeAndAddTask') {
+      await List.findOneAndUpdate(
+        { _id: source_id },
+        {
+          $pull: {
+            tasks: task._id,
+          },
+        },
+        { safe: true }
+      );
+
+      await List.findOneAndUpdate(
+        { _id: params.id },
+        {
+          $push: {
+            tasks: task._id,
+          },
+        },
+        { safe: true }
+      );
+      const existingTask = await Task.findById(task._id);
+
+      existingTask.list = params.id;
+
+      await existingTask.save();
     }
 
     await existingList.save();
