@@ -38,7 +38,7 @@ const Board = () => {
     }
   };
 
-  const handleOnDragEnd = (result: DropResult) => {
+  const handleOnDragEnd = async (result: DropResult) => {
     const { destination, source, type } = result;
 
     if (!destination) return;
@@ -54,17 +54,63 @@ const Board = () => {
     }
 
     if (type === 'task') {
-      let list = lists.find((list) => list._id === source.droppableId);
+      const list = lists.find((list) => list._id === source.droppableId);
 
-      const result = Array.from(list?.tasks as ArrayLike<TaskProps>);
-      const [removed] = result.splice(source.index, 1);
-      result.splice(destination.index, 0, removed);
+      if (source.droppableId === destination.droppableId) {
+        const result = Array.from(list?.tasks as ArrayLike<TaskProps>);
+        const [removed] = result.splice(source.index, 1);
+        result.splice(destination.index, 0, removed);
 
-      const rearrangedTasks = result.map((task, index) => ({ ...task, order: index + 1 }));
+        const rearrangedTasks = result.map((task, index) => ({ ...task, order: index + 1 }));
 
-      setLists(
-        lists.map((item) => (item._id === list?._id ? { ...item, tasks: rearrangedTasks } : item))
-      );
+        setLists(
+          lists.map((item) => (item._id === list?._id ? { ...item, tasks: rearrangedTasks } : item))
+        );
+      } else if (source.droppableId !== destination.droppableId) {
+        const newList = lists.find((list) => list._id === destination.droppableId);
+
+        const withdrawnList = Array.from(list?.tasks as ArrayLike<TaskProps>);
+        const [removed] = withdrawnList.splice(source.index, 1);
+
+        const injectedList = Array.from(newList?.tasks as ArrayLike<TaskProps>);
+        injectedList.splice(destination.index, 0, removed);
+
+        const rearrangedTasksOldList = withdrawnList.map((task, index) => ({
+          ...task,
+          order: index + 1,
+        }));
+        const rearrangedTasksNewList = injectedList.map((task, index) => ({
+          ...task,
+          order: index + 1,
+        }));
+
+        setLists(
+          lists.map((item) =>
+            item._id === list?._id
+              ? { ...item, tasks: rearrangedTasksOldList }
+              : item._id === newList?._id
+              ? { ...item, tasks: rearrangedTasksNewList }
+              : item
+          )
+        );
+
+        try {
+          const removeAndAddTask = async () => {
+            await fetch(`/api/list/${destination.droppableId}`, {
+              method: 'PATCH',
+              body: JSON.stringify({
+                action: 'removeAndAddTask',
+                task: removed,
+                source_id: source.droppableId,
+              }),
+            });
+          };
+
+          removeAndAddTask();
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   };
 
