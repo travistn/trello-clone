@@ -11,6 +11,7 @@ const ListSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: Task,
+      unique: true,
     },
   ],
   order: { type: Number, required: [true, 'An order is required.'] },
