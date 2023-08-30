@@ -82,6 +82,7 @@ const Board = () => {
         const rearrangedTasksNewList = injectedList.map((task, index) => ({
           ...task,
           order: index + 1,
+          list: destination.droppableId,
         }));
 
         setLists(
