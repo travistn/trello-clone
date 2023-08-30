@@ -89,11 +89,10 @@ const TaskCard = ({
       )}
       <div className='flex flex-row items-center justify-between'>
         <p className='text-[14px] text-navy pl-1 leading-5'>{task.description}</p>
-        <div className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover/task:visible'>
-          <PencilIcon
-            className='w-[11px] fill-white stroke-light-navy stroke-2'
-            onClick={() => setToggleEdit((prevState) => !prevState)}
-          />
+        <div
+          className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover/task:visible cursor-pointer'
+          onClick={() => setToggleEdit((prevState) => !prevState)}>
+          <PencilIcon className='w-[11px] fill-white stroke-light-navy stroke-2' />
         </div>
       </div>
       {toggleEdit && (
