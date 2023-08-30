@@ -17,73 +17,67 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
   const lists = useListStore((state) => state.lists);
   const list = lists.find((list) => task.list === list._id);
 
+  const setLists = useListStore((state) => state.setLists);
+
   const [selectedList, setSelectedList] = useState(list);
   const [selectedPosition, setSelectedPostion] = useState(selectedList?.tasks?.indexOf(task));
 
-  const moveIndexes = (arr: any, oldIndex: number, newIndex: number) => {
-    while (oldIndex < 0) {
-      oldIndex += arr.length;
-    }
-    while (newIndex < 0) {
-      newIndex += arr.length;
-    }
-    if (newIndex >= arr.length) {
-      let k = newIndex - arr.length;
-      while (k-- + 1) {
-        arr.push(undefined);
+  const changeTaskPosition = async () => {
+    setIsSubmitted(true);
+
+    try {
+      if (list?._id === selectedList?._id) {
+        const result = Array.from(selectedList?.tasks as ArrayLike<TaskProps>);
+        const [removed] = result.splice(result.indexOf(task), 1);
+        result.splice(selectedPosition as number, 0, removed);
+
+        const rearrangedTasks = result.map((task, index) => ({ ...task, order: index + 1 }));
+
+        setLists(
+          lists.map((item) => (item._id === list?._id ? { ...item, tasks: rearrangedTasks } : item))
+        );
+      } else if (list?._id !== selectedList?._id) {
+        const newList = lists.find((list) => list._id === selectedList?._id);
+
+        const withdrawnList = Array.from(list?.tasks as ArrayLike<TaskProps>);
+        const [removed] = withdrawnList.splice(withdrawnList.indexOf(task), 1);
+
+        const injectedList = Array.from(newList?.tasks as ArrayLike<TaskProps>);
+        injectedList.splice(selectedPosition as number, 0, removed);
+
+        const rearrangedTasksOldList = withdrawnList.map((task, index) => ({
+          ...task,
+          order: index + 1,
+        }));
+        const rearrangedTasksNewList = injectedList.map((task, index) => ({
+          ...task,
+          order: index + 1,
+          list: selectedList?._id,
+        }));
+
+        setLists(
+          lists.map((item) =>
+            item._id === list?._id
+              ? { ...item, tasks: rearrangedTasksOldList }
+              : item._id === newList?._id
+              ? { ...item, tasks: rearrangedTasksNewList }
+              : item
+          )
+        );
+
+        const removeAndAddTask = async () => {
+          await fetch(`/api/list/${selectedList?._id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+              action: 'removeAndAddTask',
+              task: removed,
+              source_id: list?._id,
+            }),
+          });
+        };
+
+        removeAndAddTask();
       }
-    }
-    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
-    return arr;
-  };
-
-  const changeTaskList = async () => {
-    setIsSubmitted(true);
-
-    const newTasks = [...(selectedList?.tasks ?? []), task];
-
-    const changedTaskPositions = moveIndexes(
-      newTasks,
-      newTasks?.indexOf(task) as number,
-      selectedPosition as number
-    ).map((task: { _id: string }) => task._id);
-
-    try {
-      await fetch(`/api/task/${task._id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          list: selectedList,
-          task,
-          tasks: changedTaskPositions,
-          category: 'list',
-        }),
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setToggleEdit(false);
-      setIsSubmitted(false);
-    }
-  };
-
-  const updateTaskPosition = async () => {
-    setIsSubmitted(true);
-
-    try {
-      const changedTaskPositions = moveIndexes(
-        selectedList?.tasks,
-        selectedList?.tasks?.indexOf(task) as number,
-        selectedPosition as number
-      ).map((task: { _id: string }) => task._id);
-
-      await fetch(`/api/task/${task._id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          list: selectedList,
-          category: 'position',
-          tasks: changedTaskPositions,
-        }),
-      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -183,10 +177,7 @@ const MoveCard = ({ task, setOpenMove, setIsSubmitted, setToggleEdit }: MoveCard
         title='Move'
         containerStyles='w-fit bg-[#0c66e4] px-4 py-1.5 rounded-[4px] mt-3 hover:bg-[#0055CC]'
         textStyles='text-[14px] text-white'
-        handleClick={() => {
-          if (selectedList?._id !== list?._id) changeTaskList();
-          else if (selectedPosition !== list?.tasks?.indexOf(task)) updateTaskPosition();
-        }}
+        handleClick={changeTaskPosition}
       />
     </div>
   );
