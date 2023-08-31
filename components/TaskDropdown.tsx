@@ -1,10 +1,11 @@
 import { useState, RefObject } from 'react';
 import { Menu } from '@headlessui/react';
-import { ArchiveBoxXMarkIcon, ArrowRightIcon, TagIcon } from '@heroicons/react/24/solid';
+import { ArchiveBoxXMarkIcon, ArrowRightIcon, TagIcon, ClockIcon } from '@heroicons/react/24/solid';
 
 import { TaskProps } from '@/types';
 import MoveCard from './MoveCard';
 import Labels from './Labels';
+import Date from './Date';
 
 interface TaskDropDownProps {
   task: TaskProps;
@@ -15,6 +16,7 @@ interface TaskDropDownProps {
 const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps) => {
   const [openMove, setOpenMove] = useState(false);
   const [openLabels, setOpenLabels] = useState(false);
+  const [openDate, setOpenDate] = useState(false);
 
   const deleteTask = async () => {
     const hasConfirmed = confirm('Are you sure you want to delete this task?');
@@ -92,6 +94,29 @@ const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps
           {openLabels && (
             <div className='absolute mt-2 z-10'>
               <Labels task={task} setOpenLabels={setOpenLabels} setIsSubmitted={setIsSubmitted} />
+            </div>
+          )}
+        </div>
+        <div className='relative'>
+          <Menu.Item as='div' className='relative'>
+            {({ active }) => (
+              <button
+                className={`${
+                  active ? 'bg-black text-white' : 'bg-[#0009] text-[#c7d1db]'
+                } flex flex-row items-center gap-2 rounded-[3px] text-[14px] leading-[20px] px-3 py-1.5 transition-transform duration-100 ease-in hover:translate-x-1`}
+                onClick={() => setOpenDate((prevState) => !prevState)}>
+                <ClockIcon
+                  className={`${
+                    active ? 'stroke-white' : 'stroke-[#c7d1db]'
+                  } w-[14px] fill-black stroke-[1.2]`}
+                />
+                Edit Dates
+              </button>
+            )}
+          </Menu.Item>
+          {openDate && (
+            <div className='absolute mt-2 z-10'>
+              <Date setOpenDate={setOpenDate} />
             </div>
           )}
         </div>
