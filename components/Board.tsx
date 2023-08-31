@@ -144,7 +144,7 @@ const Board = () => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       ref={provided.innerRef}
-                      className='pb-1.5'>
+                      className='pb-1.5 h-fit'>
                       <ListCard list={list} setIsSubmitted={setIsSubmitted} />
                     </div>
                   )}
