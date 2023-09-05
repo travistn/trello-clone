@@ -6,7 +6,7 @@ const CustomCaption = (props: CaptionProps) => {
   const { goToMonth, nextMonth, previousMonth } = useNavigation();
 
   return (
-    <h4 className='flex flex-row justify-between items-center mb-2 text-navy'>
+    <h4 className='flex flex-row justify-between items-center mb-2 text-navy px-3'>
       <ChevronLeftIcon
         aria-disabled={!previousMonth}
         onClick={() => previousMonth && goToMonth(previousMonth)}
