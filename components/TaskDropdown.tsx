@@ -5,7 +5,7 @@ import { ArchiveBoxXMarkIcon, ArrowRightIcon, TagIcon, ClockIcon } from '@heroic
 import { TaskProps } from '@/types';
 import MoveCard from './MoveCard';
 import Labels from './Labels';
-import Date from './Date';
+import Dates from './Dates';
 
 interface TaskDropDownProps {
   task: TaskProps;
@@ -116,7 +116,7 @@ const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps
           </Menu.Item>
           {openDate && (
             <div className='absolute mt-2 z-10'>
-              <Date setOpenDate={setOpenDate} />
+              <Dates setOpenDate={setOpenDate} />
             </div>
           )}
         </div>
