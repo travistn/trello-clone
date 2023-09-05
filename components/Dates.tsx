@@ -1,5 +1,5 @@
 import { ChangeEventHandler, useState } from 'react';
-import { DateFormatter, DayPicker, useInput } from 'react-day-picker';
+import { DateFormatter, DayPicker } from 'react-day-picker';
 import { format, isValid, parse } from 'date-fns';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
@@ -11,15 +11,22 @@ interface DateProps {
   setOpenDate: (toggle: boolean) => void;
 }
 
-const Dates = ({ setOpenDate }: DateProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [dayInputValue, setDayInputValue] = useState<string>('');
-  const [timeInputValue, setTimeInputValue] = useState<string>('');
-  const [checked, setChecked] = useState(true);
+const formatWeekdayName: DateFormatter = (day, options) => {
+  return format(day, 'EEE', { locale: options?.locale });
+};
 
-  const formatWeekdayName: DateFormatter = (day, options) => {
-    return format(day, 'EEE', { locale: options?.locale });
-  };
+const addOneDay = (date: Date) => {
+  date.setDate(date.getDate() + 1);
+  return date;
+};
+
+const Dates = ({ setOpenDate }: DateProps) => {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(addOneDay(new Date()));
+  const [dayInputValue, setDayInputValue] = useState<string>(
+    format(addOneDay(new Date()), 'M/d/Y')
+  );
+  const [timeInputValue, setTimeInputValue] = useState<string>(format(addOneDay(new Date()), 'p'));
+  const [checked, setChecked] = useState(true);
 
   const handleDaySelect = (date: Date | undefined) => {
     setSelectedDate(date);
