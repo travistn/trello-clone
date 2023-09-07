@@ -13,6 +13,7 @@ export interface TaskProps {
   list?: string;
   labels?: LabelProps[];
   order?: number;
+  dueDate?: Date;
 }
 
 export interface LabelProps {
