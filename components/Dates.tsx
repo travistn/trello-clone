@@ -6,8 +6,11 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import 'react-day-picker/dist/style.css';
 import '/styles/day-picker.css';
 import CustomCaption from './CustomCaption';
+import CustomButton from './CustomButton';
+import { TaskProps } from '@/types';
 
 interface DateProps {
+  task: TaskProps;
   setOpenDate: (toggle: boolean) => void;
 }
 
@@ -20,7 +23,7 @@ const addOneDay = (date: Date) => {
   return date;
 };
 
-const Dates = ({ setOpenDate }: DateProps) => {
+const Dates = ({ task, setOpenDate }: DateProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(addOneDay(new Date()));
   const [dayInputValue, setDayInputValue] = useState<string>(
     format(addOneDay(new Date()), 'M/d/Y')
@@ -46,6 +49,22 @@ const Dates = ({ setOpenDate }: DateProps) => {
       setSelectedDate(date);
     } else {
       setSelectedDate(undefined);
+    }
+  };
+
+  const addDueDate = async () => {
+    try {
+      await fetch(`/api/task/${task._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          dueDate: `${dayInputValue} ${timeInputValue}`,
+          action: 'addDueDate',
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setOpenDate(false);
     }
   };
 
@@ -85,8 +104,8 @@ const Dates = ({ setOpenDate }: DateProps) => {
             disabled={!checked}
             value={dayInputValue}
             onChange={handleInputChange}
-            className={`w-[90px] text-[14px] leading-5 rounded-[3px] p-1.5 text-light-navy bg-[#fafafa] ${
-              checked ? 'outline-[#0c66e4]' : 'cursor-not-allowed'
+            className={`w-[90px] text-[14px] leading-5 rounded-[3px] p-1.5 text-light-navy bg-[#fafafa] outline-none shadow-[inset_0_0_0_2px] ${
+              checked ? 'shadow-[#388bff]' : 'cursor-not-allowed shadow-none'
             }`}
           />
           <input
@@ -95,11 +114,17 @@ const Dates = ({ setOpenDate }: DateProps) => {
             disabled={!checked}
             value={timeInputValue}
             onChange={handleInputChange}
-            className={`w-[90px] text-[14px] leading-5 rounded-[3px] p-1.5 text-light-navy bg-[#fafafa] ${
-              checked ? 'outline-[#0c66e4]' : 'cursor-not-allowed'
+            className={`w-[90px] text-[14px] leading-5 rounded-[3px] p-1.5 text-light-navy bg-[#fafafa] outline-none shadow-[inset_0_0_0_2px] ${
+              checked ? 'shadow-[#388bff]' : 'cursor-not-allowed shadow-none'
             }`}
           />
         </div>
+        <CustomButton
+          title='Save'
+          containerStyles='w-full bg-[#0c66e4] rounded-[3px] px-[12px] py-[6px] flex justify-center hover:bg-[#0055cc]'
+          textStyles='text-[14px] text-white'
+          handleClick={addDueDate}
+        />
       </div>
     </div>
   );
