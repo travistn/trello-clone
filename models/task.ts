@@ -16,6 +16,9 @@ const TaskSchema = new Schema({
     type: Number,
     required: [true, 'An order is required.'],
   },
+  dueDate: {
+    type: Date,
+  },
 });
 
 const Task = models.Task || model('Task', TaskSchema);
