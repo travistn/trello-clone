@@ -25,7 +25,9 @@ const Dates = ({ setOpenDate }: DateProps) => {
   const [dayInputValue, setDayInputValue] = useState<string>(
     format(addOneDay(new Date()), 'M/d/Y')
   );
-  const [timeInputValue, setTimeInputValue] = useState<string>(format(addOneDay(new Date()), 'p'));
+  const [timeInputValue, setTimeInputValue] = useState<string>(
+    format(addOneDay(new Date()), 'p') || ''
+  );
   const [checked, setChecked] = useState(true);
 
   const handleDaySelect = (date: Date | undefined) => {
@@ -33,11 +35,9 @@ const Dates = ({ setOpenDate }: DateProps) => {
 
     if (date) {
       setDayInputValue(format(date, 'M/d/Y'));
-      setTimeInputValue(format(date, 'p'));
+      setTimeInputValue(format(new Date(), 'p'));
     }
   };
-
-  const handleDateChecked = () => {};
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const date = parse(e.currentTarget.value, 'MM/dd/yyyy HH:mm', new Date());
@@ -76,8 +76,7 @@ const Dates = ({ setOpenDate }: DateProps) => {
           <input
             type='checkbox'
             className='cursor-pointer w-4 h-4'
-            checked={checked}
-            onChange={handleDateChecked}
+            defaultChecked={checked}
             onClick={() => setChecked((prevState) => !prevState)}
           />
           <input
@@ -87,7 +86,7 @@ const Dates = ({ setOpenDate }: DateProps) => {
             value={dayInputValue}
             onChange={handleInputChange}
             className={`w-[90px] text-[14px] leading-5 rounded-[3px] p-1.5 text-light-navy bg-[#fafafa] ${
-              checked ? 'outline-[#0c66e4]' : 'cursor-not-allowed	'
+              checked ? 'outline-[#0c66e4]' : 'cursor-not-allowed'
             }`}
           />
           <input
@@ -97,7 +96,7 @@ const Dates = ({ setOpenDate }: DateProps) => {
             value={timeInputValue}
             onChange={handleInputChange}
             className={`w-[90px] text-[14px] leading-5 rounded-[3px] p-1.5 text-light-navy bg-[#fafafa] ${
-              checked ? 'outline-[#0c66e4]' : 'cursor-not-allowed	'
+              checked ? 'outline-[#0c66e4]' : 'cursor-not-allowed'
             }`}
           />
         </div>
