@@ -12,6 +12,7 @@ import { TaskProps } from '@/types';
 interface DateProps {
   task: TaskProps;
   setOpenDate: (toggle: boolean) => void;
+  setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
 const formatWeekdayName: DateFormatter = (day, options) => {
@@ -23,7 +24,7 @@ const addOneDay = (date: Date) => {
   return date;
 };
 
-const Dates = ({ task, setOpenDate }: DateProps) => {
+const Dates = ({ task, setOpenDate, setIsSubmitted }: DateProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     task.dueDate ? new Date(task.dueDate) : addOneDay(new Date())
   );
@@ -55,6 +56,8 @@ const Dates = ({ task, setOpenDate }: DateProps) => {
   };
 
   const addDueDate = async () => {
+    setIsSubmitted(true);
+
     try {
       await fetch(`/api/task/${task._id}`, {
         method: 'PATCH',
@@ -67,6 +70,7 @@ const Dates = ({ task, setOpenDate }: DateProps) => {
       console.log(error);
     } finally {
       setOpenDate(false);
+      setIsSubmitted(false);
     }
   };
 

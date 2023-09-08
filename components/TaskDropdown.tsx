@@ -116,7 +116,7 @@ const TaskDropdown = ({ task, setToggleEdit, setIsSubmitted }: TaskDropDownProps
           </Menu.Item>
           {openDate && (
             <div className='absolute mt-2 z-10'>
-              <Dates task={task} setOpenDate={setOpenDate} />
+              <Dates task={task} setOpenDate={setOpenDate} setIsSubmitted={setIsSubmitted} />
             </div>
           )}
         </div>
