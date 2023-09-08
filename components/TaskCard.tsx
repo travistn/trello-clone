@@ -3,7 +3,8 @@ import {
   DraggableProvidedDragHandleProps,
   DraggableProvidedDraggableProps,
 } from 'react-beautiful-dnd';
-import { PencilIcon } from '@heroicons/react/24/solid';
+import { format } from 'date-fns';
+import { PencilIcon, ClockIcon } from '@heroicons/react/24/solid';
 
 import { TaskProps } from '@/types';
 import CustomButton from './CustomButton';
@@ -95,6 +96,12 @@ const TaskCard = ({
           <PencilIcon className='w-[11px] fill-white stroke-light-navy stroke-2' />
         </div>
       </div>
+      {task.dueDate && (
+        <div className='w-fit flex flex-row items-center gap-2 px-1.5 py-1 rounded-[3px] cursor-pointer hover:bg-[#091e420f]'>
+          <ClockIcon className='w-[16px] h-[16px] fill-white stroke-[#626f86] stroke-[1.5]' />
+          <p className='text-[12px] text-light-navy'>{format(new Date(task.dueDate), 'MMM d')}</p>
+        </div>
+      )}
       {toggleEdit && (
         <div className='flex flex-col w-full absolute top-0 left-0 z-10'>
           <div ref={taskRef}>
@@ -119,6 +126,14 @@ const TaskCard = ({
                 spellCheck={false}
                 className='text-[14px] p-1 text-navy resize-none outline-none h-[80px] w-full rounded-[8px] leading-5'
               />
+              {task.dueDate && (
+                <div className='w-fit flex flex-row items-center gap-2 px-1.5 py-1 rounded-[3px] cursor-pointer hover:bg-[#091e420f]'>
+                  <ClockIcon className='w-[16px] h-[16px] fill-white stroke-[#626f86] stroke-[1.5]' />
+                  <p className='text-[12px] text-light-navy'>
+                    {format(new Date(task.dueDate), 'MMM d')}
+                  </p>
+                </div>
+              )}
             </div>
             <CustomButton
               title='Save'
