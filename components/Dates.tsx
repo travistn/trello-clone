@@ -24,12 +24,14 @@ const addOneDay = (date: Date) => {
 };
 
 const Dates = ({ task, setOpenDate }: DateProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(addOneDay(new Date()));
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    task.dueDate ? new Date(task.dueDate) : addOneDay(new Date())
+  );
   const [dayInputValue, setDayInputValue] = useState<string>(
-    format(addOneDay(new Date()), 'M/d/Y')
+    task.dueDate ? format(new Date(task.dueDate), 'M/d/Y') : format(addOneDay(new Date()), 'M/d/Y')
   );
   const [timeInputValue, setTimeInputValue] = useState<string>(
-    format(addOneDay(new Date()), 'p') || ''
+    task.dueDate ? format(new Date(task.dueDate), 'p') : format(addOneDay(new Date()), 'p')
   );
   const [checked, setChecked] = useState(true);
 
