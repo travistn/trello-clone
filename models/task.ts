@@ -19,6 +19,9 @@ const TaskSchema = new Schema({
   dueDate: {
     type: Date,
   },
+  isDue: {
+    type: Boolean,
+  },
 });
 
 const Task = models.Task || model('Task', TaskSchema);
