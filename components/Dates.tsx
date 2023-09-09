@@ -63,6 +63,7 @@ const Dates = ({ task, setOpenDate, setIsSubmitted }: DateProps) => {
         method: 'PATCH',
         body: JSON.stringify({
           dueDate: `${dayInputValue} ${timeInputValue}`,
+          isDue: true,
           action: 'addDueDate',
         }),
       });
