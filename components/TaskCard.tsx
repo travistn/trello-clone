@@ -29,6 +29,7 @@ const TaskCard = ({
 }: TaskCardProps) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [description, setDescription] = useState('');
+  const [isDue, setIsDue] = useState(task.isDue);
 
   const taskRef = useRef(null);
 
@@ -42,7 +43,7 @@ const TaskCard = ({
         method: 'PATCH',
         body: JSON.stringify({
           description,
-          category: 'description',
+          action: 'updateTaskDescription',
         }),
       });
     } catch (error) {
@@ -69,6 +70,26 @@ const TaskCard = ({
     };
     updateTaskOrder();
   }, [task.order]);
+
+  useEffect(() => {
+    const updateTaskDue = async () => {
+      setIsSubmitted(true);
+      try {
+        await fetch(`/api/task/${task._id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            isDue,
+            action: 'updateTaskDue',
+          }),
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsSubmitted(false);
+      }
+    };
+    updateTaskDue();
+  }, [isDue]);
 
   return (
     <div
@@ -97,9 +118,15 @@ const TaskCard = ({
         </div>
       </div>
       {task.dueDate && (
-        <div className='w-fit flex flex-row items-center gap-2 px-1.5 py-1 rounded-[3px] cursor-pointer hover:bg-[#091e420f]'>
+        <div
+          className={`w-fit flex flex-row items-center gap-2 px-1.5 py-1 rounded-[3px] cursor-pointer ${
+            isDue ? 'hover:bg-[#091e420f]' : 'bg-[#1f845a] hover:bg-[#216e4e]'
+          }`}
+          onClick={() => setIsDue((prevState) => !prevState)}>
           <ClockIcon className='w-[16px] h-[16px] fill-white stroke-[#626f86] stroke-[1.5]' />
-          <p className='text-[12px] text-light-navy'>{format(new Date(task.dueDate), 'MMM d')}</p>
+          <p className={`text-[12px] ${isDue ? 'text-light-navy' : 'text-white'}`}>
+            {format(new Date(task.dueDate), 'MMM d')}
+          </p>
         </div>
       )}
       {toggleEdit && (
@@ -127,9 +154,13 @@ const TaskCard = ({
                 className='text-[14px] p-1 text-navy resize-none outline-none h-[80px] w-full rounded-[8px] leading-5'
               />
               {task.dueDate && (
-                <div className='w-fit flex flex-row items-center gap-2 px-1.5 py-1 rounded-[3px] cursor-pointer hover:bg-[#091e420f]'>
+                <div
+                  className={`w-fit flex flex-row items-center gap-2 px-1.5 py-1 rounded-[3px] cursor-pointer ${
+                    isDue ? 'hover:bg-[#091e420f]' : 'bg-[#1f845a] hover:bg-[#216e4e]'
+                  }`}
+                  onClick={() => setIsDue((prevState) => !prevState)}>
                   <ClockIcon className='w-[16px] h-[16px] fill-white stroke-[#626f86] stroke-[1.5]' />
-                  <p className='text-[12px] text-light-navy'>
+                  <p className={`text-[12px] ${isDue ? 'text-light-navy' : 'text-white'}`}>
                     {format(new Date(task.dueDate), 'MMM d')}
                   </p>
                 </div>
