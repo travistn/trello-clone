@@ -14,6 +14,7 @@ export interface TaskProps {
   labels?: LabelProps[];
   order?: number;
   dueDate?: Date;
+  isDue?: boolean;
 }
 
 export interface LabelProps {
