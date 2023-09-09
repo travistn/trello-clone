@@ -4,14 +4,14 @@ import { connectToDb } from '@/utils/database';
 import Task from '@/models/task';
 
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
-  const { description, task, dueDate, category, action } = await req.json();
+  const { description, task, dueDate, isDue, action } = await req.json();
 
   try {
     await connectToDb();
 
     const existingTask = await Task.findById(params.id);
 
-    if (category === 'description') existingTask.description = description;
+    if (action === 'updateTaskDescription') existingTask.description = description;
 
     if (action === 'updateTaskOrder') {
       existingTask.order = task.order;
@@ -19,6 +19,11 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     if (action === 'addDueDate') {
       existingTask.dueDate = dueDate;
+      existingTask.isDue = isDue;
+    }
+
+    if (action === 'updateTaskDue') {
+      existingTask.isDue = isDue;
     }
 
     await existingTask.save();
