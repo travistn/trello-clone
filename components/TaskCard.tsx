@@ -29,7 +29,7 @@ const TaskCard = ({
 }: TaskCardProps) => {
   const [toggleEdit, setToggleEdit] = useState(false);
   const [description, setDescription] = useState('');
-  const [isDue, setIsDue] = useState(task.isDue);
+  const [isDue, setIsDue] = useState<boolean>();
 
   const taskRef = useRef(null);
 
@@ -71,25 +71,23 @@ const TaskCard = ({
     updateTaskOrder();
   }, [task.order]);
 
-  useEffect(() => {
-    const updateTaskDue = async () => {
-      setIsSubmitted(true);
-      try {
-        await fetch(`/api/task/${task._id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({
-            isDue,
-            action: 'updateTaskDue',
-          }),
-        });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsSubmitted(false);
-      }
-    };
-    updateTaskDue();
-  }, [isDue]);
+  const updateTaskDue = async () => {
+    setIsSubmitted(true);
+    try {
+      await fetch(`/api/task/${task._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          isDue,
+          action: 'updateTaskDue',
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitted(false);
+      setIsDue((prevState) => !prevState);
+    }
+  };
 
   return (
     <div
@@ -120,11 +118,15 @@ const TaskCard = ({
       {task.dueDate && (
         <div
           className={`w-fit flex flex-row items-center gap-2 px-1.5 py-1 rounded-[3px] cursor-pointer ${
-            isDue ? 'hover:bg-[#091e420f]' : 'bg-[#1f845a] hover:bg-[#216e4e]'
+            task.isDue ? 'hover:bg-[#091e420f]' : 'bg-[#1f845a] hover:bg-[#216e4e]'
           }`}
-          onClick={() => setIsDue((prevState) => !prevState)}>
-          <ClockIcon className='w-[16px] h-[16px] fill-white stroke-[#626f86] stroke-[1.5]' />
-          <p className={`text-[12px] ${isDue ? 'text-light-navy' : 'text-white'}`}>
+          onClick={updateTaskDue}>
+          <ClockIcon
+            className={`w-[16px] h-[16px] stroke-[1.5] ${
+              task.isDue ? 'fill-white stroke-[#626f86]' : 'fill-[#1f845a] stroke-white'
+            }`}
+          />
+          <p className={`text-[12px] ${task.isDue ? 'text-light-navy' : 'text-white'}`}>
             {format(new Date(task.dueDate), 'MMM d')}
           </p>
         </div>
@@ -156,11 +158,15 @@ const TaskCard = ({
               {task.dueDate && (
                 <div
                   className={`w-fit flex flex-row items-center gap-2 px-1.5 py-1 rounded-[3px] cursor-pointer ${
-                    isDue ? 'hover:bg-[#091e420f]' : 'bg-[#1f845a] hover:bg-[#216e4e]'
+                    task.isDue ? 'hover:bg-[#091e420f]' : 'bg-[#1f845a] hover:bg-[#216e4e]'
                   }`}
-                  onClick={() => setIsDue((prevState) => !prevState)}>
-                  <ClockIcon className='w-[16px] h-[16px] fill-white stroke-[#626f86] stroke-[1.5]' />
-                  <p className={`text-[12px] ${isDue ? 'text-light-navy' : 'text-white'}`}>
+                  onClick={updateTaskDue}>
+                  <ClockIcon
+                    className={`w-[16px] h-[16px] stroke-[1.5] ${
+                      task.isDue ? 'fill-white stroke-[#626f86]' : 'fill-[#1f845a] stroke-white'
+                    }`}
+                  />
+                  <p className={`text-[12px] ${task.isDue ? 'text-light-navy' : 'text-white'}`}>
                     {format(new Date(task.dueDate), 'MMM d')}
                   </p>
                 </div>
