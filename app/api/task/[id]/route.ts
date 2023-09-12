@@ -19,7 +19,7 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
 
     if (action === 'addDueDate') {
       existingTask.dueDate = dueDate;
-      existingTask.isDue = isDue;
+      existingTask.isDue = true;
     }
 
     if (action === 'updateTaskDue') {
