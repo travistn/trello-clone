@@ -53,6 +53,9 @@ const Dates = ({ task, setOpenDate, setIsSubmitted }: DateProps) => {
     } else {
       setSelectedDate(undefined);
     }
+
+    if (e.target.id === 'day') setDayInputValue(e.target.value);
+    if (e.target.id === 'time') setTimeInputValue(e.target.value);
   };
 
   const addDueDate = async () => {
@@ -105,6 +108,7 @@ const Dates = ({ task, setOpenDate, setIsSubmitted }: DateProps) => {
             onClick={() => setChecked((prevState) => !prevState)}
           />
           <input
+            id='day'
             type='text'
             placeholder='M/D/YYYY'
             disabled={!checked}
@@ -115,6 +119,7 @@ const Dates = ({ task, setOpenDate, setIsSubmitted }: DateProps) => {
             }`}
           />
           <input
+            id='time'
             type='text'
             placeholder='h:mm A'
             disabled={!checked}
