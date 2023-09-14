@@ -77,6 +77,24 @@ const Dates = ({ task, setOpenDate, setIsSubmitted }: DateProps) => {
     }
   };
 
+  const deleteDueDate = async () => {
+    setIsSubmitted(true);
+
+    try {
+      await fetch(`/api/task/${task._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          action: 'deleteDueDate',
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setOpenDate(false);
+      setIsSubmitted(false);
+    }
+  };
+
   return (
     <div className='bg-white rounded-[8px] w-[300px] cursor-default flex flex-col p-3 gap-2'>
       <header className='grid grid-cols-3 justify-items-center items-center'>
@@ -135,6 +153,12 @@ const Dates = ({ task, setOpenDate, setIsSubmitted }: DateProps) => {
           containerStyles='w-full bg-[#0c66e4] rounded-[3px] px-[12px] py-[6px] flex justify-center hover:bg-[#0055cc]'
           textStyles='text-[14px] text-white'
           handleClick={addDueDate}
+        />
+        <CustomButton
+          title='Remove'
+          containerStyles='w-full bg-[#f1f2f4] rounded-[3px] px-[12px] py-[6px] flex justify-center hover:bg-[#091e4224]'
+          textStyles='text-[14px] text-navy'
+          handleClick={deleteDueDate}
         />
       </div>
     </div>
