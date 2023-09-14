@@ -83,7 +83,7 @@ const TaskCard = ({
               <div
                 className={`h-[6.5px] min-w-[40px] max-w-[40px] rounded-[8px] bg-${label.color} hover:brightness-[.80]`}
               />
-              <Tooltip label={label} />
+              <Tooltip label={label} type='label' />
             </div>
           ))}
         </div>
@@ -110,7 +110,7 @@ const TaskCard = ({
                       <div
                         className={`h-[6.5px] min-w-[40px] max-w-[40px] rounded-[8px] bg-${label.color} hover:brightness-[.80]`}
                       />
-                      <Tooltip label={label} />
+                      <Tooltip label={label} type='label' />
                     </div>
                   ))}
                 </div>
