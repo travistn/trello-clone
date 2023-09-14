@@ -26,6 +26,11 @@ export const PATCH = async (req: Request, { params }: { params: { id: string } }
       existingTask.isDue = isDue;
     }
 
+    if (action === 'deleteDueDate') {
+      existingTask.dueDate = undefined;
+      existingTask.isDue = undefined;
+    }
+
     await existingTask.save();
 
     return NextResponse.json('Successfully updated the task', { status: 200 });
