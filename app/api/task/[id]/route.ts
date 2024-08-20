@@ -1,7 +1,23 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { connectToDb } from '@/utils/database';
 import Task from '@/models/task';
+
+export const POST = async (req: NextRequest) => {
+  const { taskId } = await req.json();
+
+  try {
+    await connectToDb();
+
+    const task = await Task.findById(taskId);
+
+    return NextResponse.json(task, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(JSON.stringify('Failed to retrieve the task.'), {
+      status: 500,
+    });
+  }
+};
 
 export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
   const { description, task, dueDate, isDue, action } = await req.json();
