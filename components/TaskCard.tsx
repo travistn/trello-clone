@@ -4,6 +4,7 @@ import {
   DraggableProvidedDraggableProps,
 } from 'react-beautiful-dnd';
 import { PencilIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/navigation';
 
 import { TaskProps } from '@/types';
 import CustomButton from './CustomButton';
@@ -31,6 +32,7 @@ const TaskCard = ({
   const [description, setDescription] = useState('');
 
   const taskRef = useRef(null);
+  const router = useRouter();
 
   useClickoutClose(taskRef, setToggleEdit);
 
@@ -51,6 +53,10 @@ const TaskCard = ({
       setToggleEdit(false);
       setIsSubmitted(false);
     }
+  };
+
+  const onClickTaskHandler = () => {
+    router.push(`/${task._id}`);
   };
 
   useEffect(() => {
@@ -89,7 +95,9 @@ const TaskCard = ({
         </div>
       )}
       <div className='flex flex-row items-center justify-between'>
-        <p className='text-[14px] text-navy pl-1 leading-5'>{task.description}</p>
+        <p className='text-[14px] text-navy pl-1 leading-5' onClick={onClickTaskHandler}>
+          {task.description}
+        </p>
         <div
           className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover/task:visible cursor-pointer'
           onClick={() => setToggleEdit((prevState) => !prevState)}>
