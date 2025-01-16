@@ -1,5 +1,4 @@
 import './globals.css';
-import Navbar from '@/components/Navbar';
 
 export const metadata = {
   title: 'Trello Clone',
@@ -10,10 +9,7 @@ export const metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang='en'>
-      <body className='no-scrollbar md:overflow-hidden'>
-        <Navbar />
-        {children}
-      </body>
+      <body className='no-scrollbar md:overflow-hidden'>{children}</body>
     </html>
   );
 };
