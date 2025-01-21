@@ -1,6 +1,8 @@
+import { signOut } from 'next-auth/react';
+
 const Navbar = () => {
   return (
-    <nav className='w-full bg-[#46536a] py-2 px-4 md:md:w-screen'>
+    <nav className='w-full bg-[#46536a] py-2 px-4 md:md:w-screen flex flex-row justify-between md:px-10'>
       <div className='flex flex-row items-center gap-2'>
         <svg viewBox='0 0 128 128' className='w-[20px]'>
           <path
@@ -9,6 +11,11 @@ const Navbar = () => {
         </svg>
         <span className='text-[20px] text-white font-bold tracking-[1px]'>Trello</span>
       </div>
+      <button
+        className='text-white text-[15px] border rounded-[3px] p-2 hover:opacity-80'
+        onClick={() => signOut()}>
+        Sign Out
+      </button>
     </nav>
   );
 };
