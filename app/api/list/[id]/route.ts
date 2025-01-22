@@ -4,6 +4,20 @@ import { connectToDb } from '@/utils/database';
 import List from '@/models/list';
 import Task from '@/models/task';
 
+export const GET = async (req: Request, { params }: { params: { id: string } }) => {
+  try {
+    await connectToDb();
+
+    const lists = await List.find({ userId: params.id })
+      .populate({ path: 'tasks', options: { sort: { order: 1 } }, populate: { path: 'labels' } })
+      .sort({ order: 1 });
+
+    return NextResponse.json(lists, { status: 200 });
+  } catch (error) {
+    return NextResponse.json('Failed to fetch all lists', { status: 500 });
+  }
+};
+
 export const DELETE = async (req: Request, { params }: { params: { id: string } }) => {
   try {
     await connectToDb();
