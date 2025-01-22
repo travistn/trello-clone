@@ -44,3 +44,12 @@ export interface FormProps {
   setTask?: (task: TaskProps) => void;
   setToggle?: ((toggle: boolean) => void) | undefined;
 }
+
+export interface UserProps {
+  email?: string;
+  id: string;
+  image?: string;
+  name?: string;
+  accountType: string;
+  guestId?: string;
+}
