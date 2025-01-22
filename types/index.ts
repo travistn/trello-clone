@@ -5,6 +5,7 @@ export interface ListProps {
   _id?: string;
   tasks?: TaskProps[];
   order?: number;
+  userId?: string;
 }
 
 export interface TaskProps {
@@ -15,6 +16,7 @@ export interface TaskProps {
   order?: number;
   dueDate?: Date;
   isDue?: boolean;
+  userId?: string;
 }
 
 export interface LabelProps {
