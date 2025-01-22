@@ -65,6 +65,7 @@ const ListCard = ({ list, setIsSubmitted }: ListCardProps) => {
       await fetch('/api/task/new', {
         method: 'POST',
         body: JSON.stringify({
+          userId: list.userId,
           description: task.description,
           list: list._id,
           order: (list?.tasks?.length as number) + 1,
