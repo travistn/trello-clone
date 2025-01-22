@@ -5,6 +5,7 @@ export interface ListProps {
   _id?: string;
   tasks?: TaskProps[];
   order?: number;
+  userId?: string;
 }
 
 export interface TaskProps {
@@ -15,6 +16,7 @@ export interface TaskProps {
   order?: number;
   dueDate?: Date;
   isDue?: boolean;
+  userId?: string;
 }
 
 export interface LabelProps {
@@ -43,4 +45,13 @@ export interface FormProps {
   task?: TaskProps;
   setTask?: (task: TaskProps) => void;
   setToggle?: ((toggle: boolean) => void) | undefined;
+}
+
+export interface UserProps {
+  email?: string;
+  id: string;
+  image?: string;
+  name?: string;
+  accountType: string;
+  guestId?: string;
 }

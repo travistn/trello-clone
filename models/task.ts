@@ -3,6 +3,7 @@ import { Schema, model, models } from 'mongoose';
 import Label from './label';
 
 const TaskSchema = new Schema({
+  userId: { type: String },
   description: {
     type: String,
     required: [true, 'A description is required.'],

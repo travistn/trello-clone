@@ -2,11 +2,11 @@ import { connectToDb } from '@/utils/database';
 import List from '@/models/list';
 
 export const POST = async (req: Request) => {
-  const { title, order } = await req.json();
+  const { userId, title, order } = await req.json();
 
   try {
     await connectToDb();
-    const newList = new List({ title, order });
+    const newList = new List({ userId, title, order });
 
     await newList.save();
 

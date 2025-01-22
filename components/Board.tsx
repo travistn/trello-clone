@@ -7,6 +7,7 @@ import ListCard from './ListCard';
 import CustomButton from './CustomButton';
 import Form from './Form';
 import useListStore from '@/store/store';
+import { useUserStore } from '@/store/store';
 import { TaskProps } from '@/types';
 
 const Board = () => {
@@ -17,6 +18,8 @@ const Board = () => {
   const lists = useListStore((state) => state.lists);
   const setLists = useListStore((state) => state.setLists);
 
+  const user = useUserStore((state) => state.user);
+
   const createList = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
@@ -25,6 +28,7 @@ const Board = () => {
       await fetch('/api/list/new', {
         method: 'POST',
         body: JSON.stringify({
+          userId: user.id,
           title: list.title,
           order: lists.length + 1,
         }),
@@ -117,7 +121,7 @@ const Board = () => {
 
   useEffect(() => {
     const fetchLists = async () => {
-      const response = await fetch('/api/list', {
+      const response = await fetch(`/api/list/${user.id}`, {
         method: 'GET',
       });
       const data = await response.json();

@@ -5,9 +5,15 @@ import { useSession } from 'next-auth/react';
 import Login from '@/components/Login';
 import Board from '@/components/Board';
 import Navbar from '@/components/Navbar';
+import { useUserStore } from '@/store/store';
+import { UserProps } from '@/types';
 
 const Home = () => {
   const { data: session } = useSession();
+
+  const setUser = useUserStore((state) => state.setUser);
+
+  setUser(session?.user as UserProps);
 
   return (
     <main
