@@ -3,6 +3,7 @@ import { Schema, model, models } from 'mongoose';
 import Task from './task';
 
 const ListSchema = new Schema({
+  userId: { type: String },
   title: {
     type: String,
     required: [true, 'A title is required.'],
@@ -11,7 +12,6 @@ const ListSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: Task,
-      unique: true,
     },
   ],
   order: { type: Number, required: [true, 'An order is required.'] },
