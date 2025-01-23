@@ -20,6 +20,8 @@ const handler = NextAuth({
       async authorize(credentials, req) {
         const guestId = randomUUID();
 
+        await connectToDb();
+
         await User.create({
           guestId,
           accountType: 'guest',
@@ -33,6 +35,9 @@ const handler = NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: '/auth/credentials',
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
