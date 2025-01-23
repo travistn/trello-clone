@@ -12,6 +12,10 @@ const UserSchema = new Schema({
   accountType: {
     type: String,
   },
+  expireAt: {
+    type: Date,
+    expires: 0,
+  },
 });
 
 const User = models.User || model('User', UserSchema);

@@ -23,6 +23,7 @@ const handler = NextAuth({
         await User.create({
           guestId,
           accountType: 'guest',
+          expireAt: new Date(Date.now() + 30 * 60 * 1000),
         });
 
         const user = await User.findOne({ guestId });
