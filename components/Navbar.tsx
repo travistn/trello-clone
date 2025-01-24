@@ -13,7 +13,7 @@ const Navbar = () => {
       </div>
       <button
         className='text-white text-[15px] border rounded-[3px] p-2 hover:opacity-80'
-        onClick={() => signOut()}>
+        onClick={() => signOut({ callbackUrl: '/' })}>
         Sign Out
       </button>
     </nav>
