@@ -55,10 +55,6 @@ const TaskCard = ({
     }
   };
 
-  const onClickTaskHandler = () => {
-    router.push(`/${task._id}`);
-  };
-
   useEffect(() => {
     setDescription(task.description);
   }, []);
@@ -95,9 +91,7 @@ const TaskCard = ({
         </div>
       )}
       <div className='flex flex-row items-center justify-between'>
-        <p className='text-[14px] text-navy pl-1 leading-5' onClick={onClickTaskHandler}>
-          {task.description}
-        </p>
+        <p className='text-[14px] text-navy pl-1 leading-5'>{task.description}</p>
         <div
           className='rounded-md p-2 hover:bg-gray-300 mr-[-0.3rem] invisible group-hover/task:visible cursor-pointer'
           onClick={() => setToggleEdit((prevState) => !prevState)}>
